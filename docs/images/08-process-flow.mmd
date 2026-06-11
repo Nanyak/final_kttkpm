@@ -1,19 +1,49 @@
-flowchart LR
-  Login[Login / JWT] --> Browse[Browse products]
-  Browse --> Add[Add item to cart]
-  Add --> Validate[Cart validates product and stock]
-  Validate --> Cart[(Active cart)]
-  Cart --> Checkout[Create order]
-  Checkout --> Stock[Reduce product stock]
-  Stock --> Convert[Mark cart converted]
-  Convert --> Order[(Order pending payment)]
-  Order --> Pay[Create payment]
-  Pay --> PaymentStatus{Payment completed?}
-  PaymentStatus -- yes --> Event[payment.completed event]
-  PaymentStatus -- no --> Failed[payment.failed / pending]
-  Event --> Shipment[Auto-create shipment]
-  Shipment --> Tracking[Tracking updates]
-  Tracking --> Delivered[Order shipped/delivered]
-  Browse --> Behavior[Track behavior]
-  Behavior --> Recommend[Hybrid recommendations]
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
+flowchart TD
+  Start(( ))
+  End((( )))
 
+  subgraph Customer["Customer"]
+    Login["Login and receive JWT"]
+    Browse["Browse product catalog"]
+    Add["Add product to cart"]
+    Checkout["Submit checkout"]
+    Pay["Create payment"]
+    Track["Track shipment"]
+  end
+
+  subgraph Commerce["Commerce Services"]
+    Validate["Validate product and stock"]
+    Cart["Active cart"]
+    CreateOrder["Create order from cart"]
+    ReduceStock["Reduce product stock"]
+    ConvertCart["Mark cart converted"]
+    PaymentDecision{"Payment completed?"}
+    Failed["Payment failed or pending"]
+    Shipment["Auto-create shipment"]
+    Status["Update tracking status"]
+  end
+
+  subgraph AI["AI Service"]
+    Behavior["Track behavior event"]
+    Recommend["Update recommendation signals"]
+  end
+
+  Start --> Login --> Browse --> Add --> Validate
+  Browse --> Behavior --> Recommend
+  Validate --> Cart --> Checkout --> CreateOrder
+  CreateOrder --> ReduceStock --> ConvertCart --> Pay --> PaymentDecision
+  PaymentDecision -- yes --> Shipment --> Status --> Track --> End
+  PaymentDecision -- no --> Failed --> End
+
+  classDef startEnd fill:#111827,stroke:#111827,color:#111827;
+  classDef action fill:#74c7e8,stroke:#1f2937,color:#111827;
+  classDef decision fill:#ffffff,stroke:#1f2937,color:#111827;
+  classDef lane fill:#ffffff,stroke:#b8b8b8,color:#111827;
+
+  class Start,End startEnd;
+  class Login,Browse,Add,Checkout,Pay,Track,Validate,Cart,CreateOrder,ReduceStock,ConvertCart,Failed,Shipment,Status,Behavior,Recommend action;
+  class PaymentDecision decision;
+  style Customer fill:#ffffff,stroke:#b8b8b8,color:#111827
+  style Commerce fill:#ffffff,stroke:#b8b8b8,color:#111827
+  style AI fill:#ffffff,stroke:#b8b8b8,color:#111827

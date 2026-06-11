@@ -1,10 +1,27 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Payment { +payment_code +order_id +user_id +amount +currency +method +status +transaction_id +gateway_response +failure_reason +paid_at +created_at +updated_at }
-  class PaymentRefund { +refund_amount +reason +status +refund_transaction_id +created_at +processed_at }
-  class PaymentViews { +list() +create() +detail() +receipt() +refund() +vnpay_webhook() }
-  class PaymentService { +process_payment() +create_refund() +publish_event() }
-  class CreatePaymentSerializer { +order_id +amount +method +currency }
-  Payment "1" *-- "0..*" PaymentRefund
-  PaymentViews ..> CreatePaymentSerializer
-  PaymentViews ..> PaymentService
-
+  direction LR
+  class Payment {
+    -id : int
+    -payment_code : String
+    -order_id : int
+    -user_id : int
+    -amount : Decimal
+    -currency : String
+    -method : String
+    -status : String
+    -transaction_id : String
+    -gateway_response : JSON
+    -failure_reason : Text
+    -paid_at : DateTime
+  }
+  class PaymentRefund {
+    -id : int
+    -refund_amount : Decimal
+    -reason : Text
+    -status : String
+    -refund_transaction_id : String
+    -created_at : DateTime
+    -processed_at : DateTime
+  }
+  Payment "1" *-- "*" PaymentRefund

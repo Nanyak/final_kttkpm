@@ -1,11 +1,29 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Order { +uuid order_number +int user_id +status +subtotal +shipping_fee +discount_amount +total_amount +shipping_address +payment_method +payment_status +notes +ordered_at +updated_at }
-  class OrderItem { +product_id +product_name +product_sku +unit_price +quantity +discount_per_item }
-  class CreateOrderSerializer { +shipping_address +payment_method +notes +shipping_fee +discount_amount }
-  class OrderViews { +list() +create() +detail() +cancel() +internal_status() +admin_list() }
-  class OrderService { +fetch_active_cart() +mark_cart_converted() +reduce_product_stock() +create_order_from_cart() +cancel_order() }
-  Order "1" *-- "1..*" OrderItem
-  OrderViews ..> CreateOrderSerializer
-  OrderViews ..> OrderService
-  OrderService ..> Order
-
+  direction LR
+  class Order {
+    -id : int
+    -order_number : UUID
+    -user_id : int
+    -status : String
+    -subtotal : Decimal
+    -shipping_fee : Decimal
+    -discount_amount : Decimal
+    -total_amount : Decimal
+    -shipping_address : JSON
+    -payment_method : String
+    -payment_status : String
+    -notes : Text
+    -ordered_at : DateTime
+    -updated_at : DateTime
+  }
+  class OrderItem {
+    -id : int
+    -product_id : int
+    -product_name : String
+    -product_sku : String
+    -unit_price : Decimal
+    -quantity : int
+    -discount_per_item : Decimal
+  }
+  Order "1" *-- "*" OrderItem

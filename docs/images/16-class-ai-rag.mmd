@@ -1,17 +1,35 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Product { +product_id +name +description +category +price +encoded_id }
-  class UserBehavior { +user_id +product +action +timestamp +weight }
-  class TrackBehaviorView { +post() }
-  class RecommendView { +get() }
-  class HybridRecommendationService { +recommend() +_build_user_query() +_enrich() }
-  class HybridRetriever { +retrieve() +build_context() +get_context_and_scores() +get_scores_only() }
-  class ChatbotView { +post() }
-  class RAGScoresView { +get() }
-  Product "1" <-- "0..*" UserBehavior
-  TrackBehaviorView ..> UserBehavior
-  RecommendView ..> HybridRecommendationService
-  HybridRecommendationService ..> UserBehavior
-  HybridRecommendationService ..> RAGScoresView
-  ChatbotView ..> HybridRetriever
-  RAGScoresView ..> HybridRetriever
-
+  direction LR
+  class AIProduct {
+    -id : int
+    -product_id : int
+    -name : String
+    -description : Text
+    -category : String
+    -price : Float
+    -encoded_id : int
+  }
+  class UserBehavior {
+    -id : int
+    -user_id : int
+    -action : String
+    -timestamp : DateTime
+    -weight : Float
+  }
+  class HybridRecommendation {
+    -user_id : int
+    -query : String
+    -final_score : Float
+    -lstm_score : Float
+    -graph_score : Float
+    -rag_score : Float
+  }
+  class HybridRetriever {
+    -faiss_weight : Float
+    -graph_weight : Float
+    -top_k : int
+  }
+  AIProduct "1" <-- "*" UserBehavior
+  UserBehavior "*" ..> "*" HybridRecommendation : scores
+  HybridRecommendation ..> HybridRetriever : rag_scores

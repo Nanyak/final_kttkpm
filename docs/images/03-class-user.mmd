@@ -1,14 +1,34 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Role { +int id +string name +text description +datetime created_at }
-  class User { +int id +username +email +password_hash +first_name +last_name +phone_number +is_active +is_verified +last_login +created_at +updated_at }
-  class UserAddress { +recipient_name +phone_number +address_line1 +address_line2 +district +city +province +postal_code +is_default +created_at }
-  class RegisterSerializer { +username +email +password +first_name +last_name +phone_number }
-  class LoginSerializer { +username +password }
-  class AuthViews { +register() +login() +refresh() +logout() +me() +change_password() }
-  class UserService { +hash_password() +verify_password() +generate_access_token() +generate_refresh_token() +decode_token() +register_user() +login_user() }
-  Role "1" <-- "0..*" User
-  User "1" *-- "0..*" UserAddress
-  AuthViews ..> UserService
-  AuthViews ..> RegisterSerializer
-  AuthViews ..> LoginSerializer
-
+  direction LR
+  class Role {
+    -id : int
+    -name : String
+    -description : Text
+    -created_at : DateTime
+  }
+  class User {
+    -id : int
+    -username : String
+    -email : Email
+    -password_hash : String
+    -first_name : String
+    -last_name : String
+    -phone_number : String
+    -is_active : Boolean
+    -is_verified : Boolean
+    -last_login : DateTime
+  }
+  class UserAddress {
+    -recipient_name : String
+    -phone_number : String
+    -address_line1 : String
+    -address_line2 : String
+    -district : String
+    -city : String
+    -province : String
+    -postal_code : String
+    -is_default : Boolean
+  }
+  Role "1" <-- "*" User
+  User "1" *-- "*" UserAddress

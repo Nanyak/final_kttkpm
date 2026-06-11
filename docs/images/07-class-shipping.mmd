@@ -1,10 +1,29 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Shipment { +tracking_number +order_id +user_id +carrier +service_type +status +recipient_name +recipient_phone +origin_address +destination_address +shipping_fee +weight_kg +estimated_delivery +shipped_at +delivered_at +created_at +updated_at }
-  class ShipmentTracking { +status +location +description +recorded_at }
-  class ShippingViews { +list() +create_internal() +detail() +track_public() +update_status() +calculate_fee() +admin_list() }
-  class ShippingService { +calculate_shipping_fee() +fetch_order() +auto_create_shipment_from_payment() +update_shipment_status() }
-  class CalculateFeeSerializer { +weight_kg +origin_province +destination_province +service_type }
-  Shipment "1" *-- "0..*" ShipmentTracking
-  ShippingViews ..> ShippingService
-  ShippingViews ..> CalculateFeeSerializer
-
+  direction LR
+  class Shipment {
+    -id : int
+    -tracking_number : String
+    -order_id : int
+    -user_id : int
+    -carrier : String
+    -service_type : String
+    -status : String
+    -recipient_name : String
+    -recipient_phone : String
+    -origin_address : JSON
+    -destination_address : JSON
+    -shipping_fee : Decimal
+    -weight_kg : Decimal
+    -estimated_delivery : DateTime
+    -shipped_at : DateTime
+    -delivered_at : DateTime
+  }
+  class ShipmentTracking {
+    -id : int
+    -status : String
+    -location : String
+    -description : Text
+    -recorded_at : DateTime
+  }
+  Shipment "1" *-- "*" ShipmentTracking

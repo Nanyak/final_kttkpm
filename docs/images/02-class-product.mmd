@@ -1,39 +1,49 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
+  direction LR
   class Category {
-    +int id
-    +string name
-    +string slug
-    +text description
-    +bool is_active
-    +datetime created_at
-    +datetime updated_at
-    +save()
+    -id : int
+    -name : String
+    -slug : String
+    -description : Text
+    -is_active : Boolean
   }
   class Product {
-    +int id
-    +string name
-    +string slug
-    +text description
-    +decimal base_price
-    +int stock_quantity
-    +bool is_active
-    +url image_url
-    +datetime created_at
-    +datetime updated_at
-    +save()
+    -id : int
+    -name : String
+    -slug : String
+    -description : Text
+    -base_price : Decimal
+    -stock_quantity : int
+    -is_active : Boolean
+    -image_url : URL
   }
-  class Book { +author +isbn +publisher +publication_year +page_count +language +genre }
-  class Electronics { +brand +model_number +warranty_period +voltage_requirement +connectivity +technical_specs }
-  class Fashion { +brand +size +color +material +gender +season }
-  class ProductSerializer { +create() +update() +get_product_type() }
-  class ProductListView { +get() +post() }
-  class ReduceStockView { +patch() }
-  Category "0..1" <-- "0..*" Category : parent
-  Category "1" <-- "0..*" Product
-  Product "1" *-- "0..1" Book
-  Product "1" *-- "0..1" Electronics
-  Product "1" *-- "0..1" Fashion
-  ProductSerializer ..> Product
-  ProductListView ..> ProductSerializer
-  ReduceStockView ..> Product
-
+  class Book {
+    -author : String
+    -isbn : String
+    -publisher : String
+    -publication_year : int
+    -page_count : int
+    -language : String
+    -genre : String
+  }
+  class Electronics {
+    -brand : String
+    -model_number : String
+    -warranty_period : String
+    -voltage_requirement : String
+    -connectivity : String
+    -technical_specs : JSON
+  }
+  class Fashion {
+    -brand : String
+    -size : String
+    -color : String
+    -material : String
+    -gender : String
+    -season : String
+  }
+  Product <|-- Book
+  Product <|-- Electronics
+  Product <|-- Fashion
+  Category "1" <-- "*" Product

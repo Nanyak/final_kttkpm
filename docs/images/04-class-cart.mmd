@@ -1,11 +1,19 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 classDiagram
-  class Cart { +int id +int user_id +string status +datetime created_at +datetime updated_at }
-  class CartItem { +int id +int product_id +string product_name +decimal unit_price +int quantity +datetime added_at +subtotal() }
-  class CartSerializer { +items +total_amount() +total_items() }
-  class CartViews { +get_my_cart() +clear_my_cart() +add_item() +update_item() +delete_item() +internal_detail() }
-  class CartService { +get_user_from_token() +fetch_product() +get_or_create_active_cart() +add_item_to_cart() }
-  Cart "1" *-- "0..*" CartItem
-  CartSerializer ..> Cart
-  CartViews ..> CartService
-  CartService ..> CartItem
-
+  direction LR
+  class Cart {
+    -id : int
+    -user_id : int
+    -status : String
+    -created_at : DateTime
+    -updated_at : DateTime
+  }
+  class CartItem {
+    -id : int
+    -product_id : int
+    -product_name : String
+    -unit_price : Decimal
+    -quantity : int
+    -added_at : DateTime
+  }
+  Cart "1" *-- "*" CartItem

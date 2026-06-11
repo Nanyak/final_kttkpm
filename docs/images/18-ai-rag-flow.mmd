@@ -1,3 +1,4 @@
+%%{init: {"theme": "base", "themeVariables": {"actorBkg": "#74c7e8", "actorBorder": "#1f2937", "actorTextColor": "#111827", "signalColor": "#1f2937", "signalTextColor": "#111827", "activationBkgColor": "#d8f1fb", "activationBorderColor": "#1f2937", "sequenceNumberColor": "#111827", "fontFamily": "Arial"}}}%%
 sequenceDiagram
   autonumber
   participant FE as Frontend
@@ -8,20 +9,51 @@ sequenceDiagram
   participant Graph as Neo4j
   participant Product as Product Service
 
+  rect rgb(245, 250, 253)
   FE->>GW: GET /api/ai/recommend/?user_id=42&query=...
+  activate GW
   GW->>AI: recommend
+  activate AI
   AI->>AI: sequence model scores
   AI->>Graph: graph scores
+  activate Graph
+  Graph-->>AI: graph score map
+  deactivate Graph
   AI->>RAG: GET /api/rag/scores/
+  activate RAG
   RAG->>FAISS: semantic search
+  activate FAISS
+  FAISS-->>RAG: similar product ids
+  deactivate FAISS
   RAG->>Graph: user/context expansion
+  activate Graph
+  Graph-->>RAG: graph context scores
+  deactivate Graph
   RAG-->>AI: rag scores
+  deactivate RAG
   AI-->>FE: blended recommendations
+  deactivate AI
+  deactivate GW
+  end
 
+  rect rgb(255, 255, 255)
   FE->>GW: POST /api/ai/chatbot/
+  activate GW
   GW->>RAG: chatbot query
+  activate RAG
   RAG->>FAISS: retrieve similar products
+  activate FAISS
+  FAISS-->>RAG: semantic hits
+  deactivate FAISS
   RAG->>Graph: personalize context
+  activate Graph
+  Graph-->>RAG: related products
+  deactivate Graph
   RAG->>Product: enrich product metadata
+  activate Product
+  Product-->>RAG: product details
+  deactivate Product
   RAG-->>FE: answer + recommended products
-
+  deactivate RAG
+  deactivate GW
+  end

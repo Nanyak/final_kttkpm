@@ -1,3 +1,4 @@
+%%{init: {"theme": "base", "themeVariables": {"actorBkg": "#74c7e8", "actorBorder": "#1f2937", "actorTextColor": "#111827", "signalColor": "#1f2937", "signalTextColor": "#111827", "activationBkgColor": "#d8f1fb", "activationBorderColor": "#1f2937", "sequenceNumberColor": "#111827", "fontFamily": "Arial"}}}%%
 sequenceDiagram
   autonumber
   actor Customer
@@ -14,36 +15,86 @@ sequenceDiagram
   participant SC as Shipping Consumer
 
   Customer->>FE: Login
+  activate FE
   FE->>GW: POST /api/auth/login/
+  activate GW
   GW->>User: login
+  activate User
   User-->>FE: access + refresh token
+  deactivate User
+  deactivate GW
+
   FE->>GW: GET /api/products/
+  activate GW
   GW->>Product: list products
+  activate Product
   Product-->>FE: product catalog
+  deactivate Product
+  deactivate GW
+
   FE->>GW: POST /api/carts/me/items/
+  activate GW
   GW->>Cart: add product + quantity
+  activate Cart
   Cart->>Product: GET /api/products/{id}/
+  activate Product
   Product-->>Cart: product snapshot
+  deactivate Product
   Cart-->>FE: cart item
+  deactivate Cart
+  deactivate GW
+
   FE->>GW: POST /api/orders/
+  activate GW
   GW->>Order: create order
+  activate Order
   Order->>Cart: GET /api/carts/me/
+  activate Cart
   Cart-->>Order: active cart
+  deactivate Cart
   Order->>Product: PATCH /api/products/{id}/reduce-stock/
+  activate Product
   Product-->>Order: updated stock
+  deactivate Product
   Order->>Cart: PATCH /api/carts/{id}/ status=converted
+  activate Cart
+  Cart-->>Order: converted
+  deactivate Cart
   Order->>MQ: publish order.created
   Order-->>FE: order
-  FE->>GW: POST /api/payments/
-  GW->>Payment: create payment
-  Payment->>MQ: publish payment.completed or payment.failed
-  Payment-->>FE: payment result
-  MQ-->>OC: payment event
-  OC->>Order: PATCH /api/orders/{id}/status/
-  MQ-->>SC: payment.completed
-  SC->>Ship: auto_create_shipment_from_payment()
-  Ship->>Order: fetch order snapshot
-  Ship->>MQ: publish shipment.created
-  MQ-->>OC: shipment event
-  OC->>Order: update fulfillment status
+  deactivate Order
+  deactivate GW
 
+  FE->>GW: POST /api/payments/
+  activate GW
+  GW->>Payment: create payment
+  activate Payment
+  alt payment succeeds
+    Payment->>MQ: publish payment.completed
+    Payment-->>FE: completed payment
+    MQ-->>OC: payment.completed
+    activate OC
+    OC->>Order: PATCH payment_status=paid
+    deactivate OC
+    MQ-->>SC: payment.completed
+    activate SC
+    SC->>Ship: auto_create_shipment_from_payment()
+    activate Ship
+    Ship->>Order: fetch order snapshot
+    activate Order
+    Order-->>Ship: order data
+    deactivate Order
+    Ship->>MQ: publish shipment.created
+    deactivate Ship
+    deactivate SC
+    MQ-->>OC: shipment.created
+    activate OC
+    OC->>Order: update fulfillment status
+    deactivate OC
+  else payment fails or remains COD pending
+    Payment->>MQ: publish payment.failed or no completion event
+    Payment-->>FE: failed or pending payment
+  end
+  deactivate Payment
+  deactivate GW
+  deactivate FE
