@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Vietnamese Home Cooking</title>
+  <desc id="desc">Stylized cookbook with bowl, herbs, and chopsticks.</desc>
+  <rect width="800" height="600" fill="#fff7ed"/>
+  <rect x="230" y="98" width="340" height="404" rx="20" fill="#f97316"/>
+  <rect x="270" y="98" width="300" height="404" rx="20" fill="#fed7aa"/>
+  <ellipse cx="420" cy="310" rx="115" ry="62" fill="#ffffff"/>
+  <ellipse cx="420" cy="294" rx="92" ry="38" fill="#d97706"/>
+  <path d="M354 278c28 30 92 30 130 2" stroke="#fff7ed" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M500 212 585 155M518 232 604 175" stroke="#7c2d12" stroke-width="10" stroke-linecap="round"/>
+  <path d="M354 380c52-40 78-40 128 0" stroke="#16a34a" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg>

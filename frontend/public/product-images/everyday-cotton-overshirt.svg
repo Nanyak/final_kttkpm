@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Everyday Cotton Overshirt</title>
+  <desc id="desc">Stylized sage cotton overshirt.</desc>
+  <rect width="800" height="600" fill="#f6f7f2"/>
+  <path d="M310 130h180l92 78-48 82-44-32v238H310V258l-44 32-48-82z" fill="#8aa88f"/>
+  <path d="M344 130c16 42 96 42 112 0" fill="#f6f7f2"/>
+  <path d="M400 176v310" stroke="#f6f7f2" stroke-width="8" stroke-linecap="round"/>
+  <rect x="326" y="280" width="54" height="62" rx="6" fill="#6f8f75"/>
+  <rect x="420" y="280" width="54" height="62" rx="6" fill="#6f8f75"/>
+</svg>

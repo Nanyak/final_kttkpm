@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">AeroPods Lite Wireless Earbuds</title>
+  <desc id="desc">Stylized wireless earbuds and charging case.</desc>
+  <rect width="800" height="600" fill="#eef2f7"/>
+  <rect x="250" y="310" width="300" height="142" rx="48" fill="#ffffff"/>
+  <rect x="282" y="333" width="236" height="56" rx="28" fill="#dbe4ee"/>
+  <circle cx="330" cy="210" r="54" fill="#ffffff"/>
+  <rect x="350" y="220" width="34" height="132" rx="17" fill="#ffffff"/>
+  <circle cx="470" cy="210" r="54" fill="#ffffff"/>
+  <rect x="416" y="220" width="34" height="132" rx="17" fill="#ffffff"/>
+  <circle cx="330" cy="210" r="18" fill="#38bdf8"/>
+  <circle cx="470" cy="210" r="18" fill="#38bdf8"/>
+</svg>

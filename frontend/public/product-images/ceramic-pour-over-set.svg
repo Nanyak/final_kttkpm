@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Ceramic Pour Over Set</title>
+  <desc id="desc">Stylized ceramic coffee pour over set.</desc>
+  <rect width="800" height="600" fill="#f7f3ee"/>
+  <path d="M315 155h170l-35 145H350z" fill="#fafaf9"/>
+  <path d="M348 300h104l48 162H300z" fill="#ffffff"/>
+  <path d="M492 347c72 0 72 78 6 86" stroke="#d6d3d1" stroke-width="18" stroke-linecap="round" fill="none"/>
+  <ellipse cx="400" cy="155" rx="92" ry="24" fill="#e7e5e4"/>
+  <ellipse cx="400" cy="302" rx="58" ry="15" fill="#7c2d12"/>
+</svg>

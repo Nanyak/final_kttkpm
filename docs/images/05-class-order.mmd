@@ -1,0 +1,11 @@
+classDiagram
+  class Order { +uuid order_number +int user_id +status +subtotal +shipping_fee +discount_amount +total_amount +shipping_address +payment_method +payment_status +notes +ordered_at +updated_at }
+  class OrderItem { +product_id +product_name +product_sku +unit_price +quantity +discount_per_item }
+  class CreateOrderSerializer { +shipping_address +payment_method +notes +shipping_fee +discount_amount }
+  class OrderViews { +list() +create() +detail() +cancel() +internal_status() +admin_list() }
+  class OrderService { +fetch_active_cart() +mark_cart_converted() +reduce_product_stock() +create_order_from_cart() +cancel_order() }
+  Order "1" *-- "1..*" OrderItem
+  OrderViews ..> CreateOrderSerializer
+  OrderViews ..> OrderService
+  OrderService ..> Order
+

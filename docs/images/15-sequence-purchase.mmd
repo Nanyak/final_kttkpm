@@ -1,0 +1,49 @@
+sequenceDiagram
+  autonumber
+  actor Customer
+  participant FE as React Frontend
+  participant GW as Nginx Gateway
+  participant User as User Service
+  participant Product as Product Service
+  participant Cart as Cart Service
+  participant Order as Order Service
+  participant Payment as Payment Service
+  participant MQ as RabbitMQ
+  participant Ship as Shipping Service
+  participant OC as Order Consumer
+  participant SC as Shipping Consumer
+
+  Customer->>FE: Login
+  FE->>GW: POST /api/auth/login/
+  GW->>User: login
+  User-->>FE: access + refresh token
+  FE->>GW: GET /api/products/
+  GW->>Product: list products
+  Product-->>FE: product catalog
+  FE->>GW: POST /api/carts/me/items/
+  GW->>Cart: add product + quantity
+  Cart->>Product: GET /api/products/{id}/
+  Product-->>Cart: product snapshot
+  Cart-->>FE: cart item
+  FE->>GW: POST /api/orders/
+  GW->>Order: create order
+  Order->>Cart: GET /api/carts/me/
+  Cart-->>Order: active cart
+  Order->>Product: PATCH /api/products/{id}/reduce-stock/
+  Product-->>Order: updated stock
+  Order->>Cart: PATCH /api/carts/{id}/ status=converted
+  Order->>MQ: publish order.created
+  Order-->>FE: order
+  FE->>GW: POST /api/payments/
+  GW->>Payment: create payment
+  Payment->>MQ: publish payment.completed or payment.failed
+  Payment-->>FE: payment result
+  MQ-->>OC: payment event
+  OC->>Order: PATCH /api/orders/{id}/status/
+  MQ-->>SC: payment.completed
+  SC->>Ship: auto_create_shipment_from_payment()
+  Ship->>Order: fetch order snapshot
+  Ship->>MQ: publish shipment.created
+  MQ-->>OC: shipment event
+  OC->>Order: update fulfillment status
+

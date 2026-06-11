@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Lumina Desk Lamp Pro</title>
+  <desc id="desc">Stylized desk lamp with warm light.</desc>
+  <rect width="800" height="600" fill="#f8fafc"/>
+  <ellipse cx="430" cy="485" rx="155" ry="24" fill="#dbe4ee"/>
+  <rect x="360" y="420" width="150" height="58" rx="29" fill="#334155"/>
+  <path d="M405 420 350 285" stroke="#475569" stroke-width="22" stroke-linecap="round"/>
+  <path d="M350 285 465 205" stroke="#475569" stroke-width="22" stroke-linecap="round"/>
+  <path d="M432 170h132l-28 88H405z" fill="#f59e0b"/>
+  <path d="M443 258h80l52 118H390z" fill="#fde68a" opacity=".65"/>
+</svg>

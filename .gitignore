@@ -1,0 +1,52 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Python / Django
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+media/
+staticfiles/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.eslintcache
+
+# Logs
+*.log
+logs/
+
+# Local generated data and model artifacts
+ai_service/data/
+rag_service/data/
+*.faiss
+*.index
+*.pt
+*.pth
+*.pkl
+
+# Docker / runtime volumes
+docker/mysql/data/
+docker/postgres/data/
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db

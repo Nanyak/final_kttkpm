@@ -1,0 +1,17 @@
+classDiagram
+  class Product { +product_id +name +description +category +price +encoded_id }
+  class UserBehavior { +user_id +product +action +timestamp +weight }
+  class TrackBehaviorView { +post() }
+  class RecommendView { +get() }
+  class HybridRecommendationService { +recommend() +_build_user_query() +_enrich() }
+  class HybridRetriever { +retrieve() +build_context() +get_context_and_scores() +get_scores_only() }
+  class ChatbotView { +post() }
+  class RAGScoresView { +get() }
+  Product "1" <-- "0..*" UserBehavior
+  TrackBehaviorView ..> UserBehavior
+  RecommendView ..> HybridRecommendationService
+  HybridRecommendationService ..> UserBehavior
+  HybridRecommendationService ..> RAGScoresView
+  ChatbotView ..> HybridRetriever
+  RAGScoresView ..> HybridRetriever
+

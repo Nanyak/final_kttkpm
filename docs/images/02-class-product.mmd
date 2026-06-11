@@ -1,0 +1,39 @@
+classDiagram
+  class Category {
+    +int id
+    +string name
+    +string slug
+    +text description
+    +bool is_active
+    +datetime created_at
+    +datetime updated_at
+    +save()
+  }
+  class Product {
+    +int id
+    +string name
+    +string slug
+    +text description
+    +decimal base_price
+    +int stock_quantity
+    +bool is_active
+    +url image_url
+    +datetime created_at
+    +datetime updated_at
+    +save()
+  }
+  class Book { +author +isbn +publisher +publication_year +page_count +language +genre }
+  class Electronics { +brand +model_number +warranty_period +voltage_requirement +connectivity +technical_specs }
+  class Fashion { +brand +size +color +material +gender +season }
+  class ProductSerializer { +create() +update() +get_product_type() }
+  class ProductListView { +get() +post() }
+  class ReduceStockView { +patch() }
+  Category "0..1" <-- "0..*" Category : parent
+  Category "1" <-- "0..*" Product
+  Product "1" *-- "0..1" Book
+  Product "1" *-- "0..1" Electronics
+  Product "1" *-- "0..1" Fashion
+  ProductSerializer ..> Product
+  ProductListView ..> ProductSerializer
+  ReduceStockView ..> Product
+

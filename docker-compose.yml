@@ -1,0 +1,395 @@
+x-resource-limits:
+  django_service: &django_service_limits
+    mem_limit: ${DJANGO_SERVICE_MEM_LIMIT:-512m}
+    memswap_limit: ${DJANGO_SERVICE_MEMSWAP_LIMIT:-512m}
+  worker_service: &worker_service_limits
+    mem_limit: ${WORKER_SERVICE_MEM_LIMIT:-256m}
+    memswap_limit: ${WORKER_SERVICE_MEMSWAP_LIMIT:-256m}
+  frontend_service: &frontend_service_limits
+    mem_limit: ${FRONTEND_SERVICE_MEM_LIMIT:-128m}
+    memswap_limit: ${FRONTEND_SERVICE_MEMSWAP_LIMIT:-128m}
+  gateway_service: &gateway_service_limits
+    mem_limit: ${GATEWAY_SERVICE_MEM_LIMIT:-128m}
+    memswap_limit: ${GATEWAY_SERVICE_MEMSWAP_LIMIT:-128m}
+
+services:
+
+  # ─── Infrastructure ─────────────────────────────────────────
+
+  mysql:
+    image: mysql:8.0
+    container_name: ecom_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: ecom_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecom_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: ecom_rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  # ─── Microservices ──────────────────────────────────────────
+
+  product_service:
+    <<: *django_service_limits
+    build:
+      context: ./product_service
+      dockerfile: Dockerfile
+    container_name: ecom_product
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: products_db
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_ENGINE: mysql
+    ports:
+      - "8001:8001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  user_service:
+    <<: *django_service_limits
+    build:
+      context: ./user_service
+      dockerfile: Dockerfile
+    container_name: ecom_user
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: users_db
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_ENGINE: mysql
+    ports:
+      - "8002:8002"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  cart_service:
+    <<: *django_service_limits
+    build:
+      context: ./cart_service
+      dockerfile: Dockerfile
+    container_name: ecom_cart
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: carts_db
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_ENGINE: mysql
+    ports:
+      - "8003:8003"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  order_service:
+    <<: *django_service_limits
+    build:
+      context: ./order_service
+      dockerfile: Dockerfile
+    container_name: ecom_order
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: orders_db
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_ENGINE: postgresql
+    ports:
+      - "8004:8004"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  order_consumer:
+    <<: *worker_service_limits
+    build:
+      context: ./order_service
+      dockerfile: Dockerfile
+    container_name: ecom_order_consumer
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: orders_db
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_ENGINE: postgresql
+    command: python manage.py consume_events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  payment_service:
+    <<: *django_service_limits
+    build:
+      context: ./payment_service
+      dockerfile: Dockerfile
+    container_name: ecom_payment
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: payments_db
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_ENGINE: postgresql
+    ports:
+      - "8005:8005"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  shipping_service:
+    <<: *django_service_limits
+    build:
+      context: ./shipping_service
+      dockerfile: Dockerfile
+    container_name: ecom_shipping
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: shipping_db
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_ENGINE: postgresql
+    ports:
+      - "8006:8006"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  shipping_consumer:
+    <<: *worker_service_limits
+    build:
+      context: ./shipping_service
+      dockerfile: Dockerfile
+    container_name: ecom_shipping_consumer
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: shipping_db
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_ENGINE: postgresql
+    command: python manage.py consume_events
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  neo4j:
+    image: neo4j:5.18-community
+    container_name: ecom_neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: ${NEO4J_USER:-neo4j}/${NEO4J_PASSWORD:-neo4jpassword}
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  ai_service:
+    build:
+      context: ./ai_service
+      dockerfile: Dockerfile
+    container_name: ecom_ai
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_NAME: ai_service_db
+      DB_HOST: ${MYSQL_HOST}
+      DB_PORT: ${MYSQL_PORT}
+      DB_USER: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      DB_ENGINE: mysql
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-neo4jpassword}
+      LSTM_WEIGHT: ${LSTM_WEIGHT:-0.4}
+      GRAPH_WEIGHT: ${GRAPH_WEIGHT:-0.35}
+      RAG_WEIGHT: ${RAG_WEIGHT:-0.25}
+      RAG_SERVICE_URL: http://rag_service:8008
+      TOP_N: ${TOP_N:-10}
+      ACTIVE_MODEL: ${ACTIVE_MODEL:-lstm}
+    ports:
+      - "8007:8007"
+    volumes:
+      - ./ai_service/data:/app/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+      neo4j:
+        condition: service_healthy
+      rag_service:
+        condition: service_started
+
+  rag_service:
+    build:
+      context: ./rag_service
+      dockerfile: Dockerfile
+    container_name: ecom_rag
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PRODUCT_SERVICE_URL: http://product_service:8001
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: ${NEO4J_USER:-neo4j}
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-neo4jpassword}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+      EMBED_MODEL: ${EMBED_MODEL:-paraphrase-multilingual-MiniLM-L12-v2}
+      FAISS_WEIGHT: ${FAISS_WEIGHT:-0.6}
+      GRAPH_WEIGHT: ${GRAPH_WEIGHT:-0.4}
+      TOP_K: ${TOP_N:-10}
+    ports:
+      - "8008:8008"
+    volumes:
+      - rag_faiss:/app/data/faiss
+    depends_on:
+      product_service:
+        condition: service_started
+      neo4j:
+        condition: service_healthy
+
+  # ─── Frontend ───────────────────────────────────────────────
+
+  frontend:
+    <<: *frontend_service_limits
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ecom_frontend
+    restart: unless-stopped
+    expose:
+      - "80"
+
+  # ─── API Gateway (Nginx) ────────────────────────────────────
+
+  nginx:
+    <<: *gateway_service_limits
+    image: nginx:1.25-alpine
+    container_name: ecom_gateway
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - product_service
+      - user_service
+      - cart_service
+      - order_service
+      - payment_service
+      - shipping_service
+      - ai_service
+      - rag_service
+
+# ─── Volumes ────────────────────────────────────────────────
+
+volumes:
+  mysql_data:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  neo4j_data:
+  ai_models:
+  rag_faiss:

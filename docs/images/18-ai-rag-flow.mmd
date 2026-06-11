@@ -1,0 +1,27 @@
+sequenceDiagram
+  autonumber
+  participant FE as Frontend
+  participant GW as Nginx
+  participant AI as AI Service
+  participant RAG as RAG Service
+  participant FAISS as FAISS
+  participant Graph as Neo4j
+  participant Product as Product Service
+
+  FE->>GW: GET /api/ai/recommend/?user_id=42&query=...
+  GW->>AI: recommend
+  AI->>AI: sequence model scores
+  AI->>Graph: graph scores
+  AI->>RAG: GET /api/rag/scores/
+  RAG->>FAISS: semantic search
+  RAG->>Graph: user/context expansion
+  RAG-->>AI: rag scores
+  AI-->>FE: blended recommendations
+
+  FE->>GW: POST /api/ai/chatbot/
+  GW->>RAG: chatbot query
+  RAG->>FAISS: retrieve similar products
+  RAG->>Graph: personalize context
+  RAG->>Product: enrich product metadata
+  RAG-->>FE: answer + recommended products
+

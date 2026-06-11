@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Linen Weekend Tote</title>
+  <desc id="desc">Stylized natural linen tote bag.</desc>
+  <rect width="800" height="600" fill="#f5f1e8"/>
+  <path d="M245 205h310l-30 285H275z" fill="#d6b98d"/>
+  <path d="M320 230c0-70 160-70 160 0" stroke="#9f7d50" stroke-width="22" stroke-linecap="round" fill="none"/>
+  <rect x="328" y="310" width="144" height="96" rx="10" fill="#c7a979"/>
+  <path d="M292 242h216" stroke="#f3dfbd" stroke-width="8" stroke-linecap="round"/>
+</svg>

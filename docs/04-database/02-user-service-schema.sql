@@ -1,0 +1,40 @@
+-- User Service schema (MySQL)
+CREATE TABLE roles (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  description LONGTEXT NULL,
+  created_at DATETIME(6) NOT NULL
+);
+
+CREATE TABLE users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(150) NOT NULL UNIQUE,
+  email VARCHAR(254) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100) NOT NULL DEFAULT '',
+  last_name VARCHAR(100) NOT NULL DEFAULT '',
+  phone_number VARCHAR(20) NOT NULL DEFAULT '',
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  is_verified BOOLEAN NOT NULL DEFAULT FALSE,
+  role_id BIGINT NOT NULL,
+  last_login DATETIME(6) NULL,
+  created_at DATETIME(6) NOT NULL,
+  updated_at DATETIME(6) NOT NULL,
+  CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE user_addresses (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  user_id BIGINT NOT NULL,
+  recipient_name VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(20) NOT NULL,
+  address_line1 VARCHAR(255) NOT NULL,
+  address_line2 VARCHAR(255) NOT NULL DEFAULT '',
+  district VARCHAR(100) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  province VARCHAR(100) NOT NULL,
+  postal_code VARCHAR(20) NOT NULL,
+  is_default BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at DATETIME(6) NOT NULL,
+  CONSTRAINT fk_addresses_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

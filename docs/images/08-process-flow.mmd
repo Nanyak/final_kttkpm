@@ -1,0 +1,19 @@
+flowchart LR
+  Login[Login / JWT] --> Browse[Browse products]
+  Browse --> Add[Add item to cart]
+  Add --> Validate[Cart validates product and stock]
+  Validate --> Cart[(Active cart)]
+  Cart --> Checkout[Create order]
+  Checkout --> Stock[Reduce product stock]
+  Stock --> Convert[Mark cart converted]
+  Convert --> Order[(Order pending payment)]
+  Order --> Pay[Create payment]
+  Pay --> PaymentStatus{Payment completed?}
+  PaymentStatus -- yes --> Event[payment.completed event]
+  PaymentStatus -- no --> Failed[payment.failed / pending]
+  Event --> Shipment[Auto-create shipment]
+  Shipment --> Tracking[Tracking updates]
+  Tracking --> Delivered[Order shipped/delivered]
+  Browse --> Behavior[Track behavior]
+  Behavior --> Recommend[Hybrid recommendations]
+

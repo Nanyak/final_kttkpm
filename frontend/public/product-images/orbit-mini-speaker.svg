@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Orbit Mini Bluetooth Speaker</title>
+  <desc id="desc">Stylized portable bluetooth speaker.</desc>
+  <rect width="800" height="600" fill="#f4f4f5"/>
+  <rect x="205" y="190" width="390" height="220" rx="72" fill="#2563eb"/>
+  <rect x="250" y="232" width="300" height="136" rx="44" fill="#1e3a8a"/>
+  <g fill="#93c5fd">
+    <circle cx="300" cy="278" r="8"/><circle cx="340" cy="278" r="8"/><circle cx="380" cy="278" r="8"/><circle cx="420" cy="278" r="8"/><circle cx="460" cy="278" r="8"/><circle cx="500" cy="278" r="8"/>
+    <circle cx="300" cy="322" r="8"/><circle cx="340" cy="322" r="8"/><circle cx="380" cy="322" r="8"/><circle cx="420" cy="322" r="8"/><circle cx="460" cy="322" r="8"/><circle cx="500" cy="322" r="8"/>
+  </g>
+  <circle cx="557" cy="218" r="12" fill="#bfdbfe"/>
+</svg>

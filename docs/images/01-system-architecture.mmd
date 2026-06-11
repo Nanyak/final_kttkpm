@@ -1,0 +1,39 @@
+flowchart TB
+  Browser[Browser / Customer] --> Gateway[Nginx API Gateway :8000]
+  Gateway --> Frontend[React Frontend]
+  Gateway --> Product[Product Service :8001]
+  Gateway --> User[User Service :8002]
+  Gateway --> Cart[Cart Service :8003]
+  Gateway --> Order[Order Service :8004]
+  Gateway --> Payment[Payment Service :8005]
+  Gateway --> Shipping[Shipping Service :8006]
+  Gateway --> AI[AI Service :8007]
+  Gateway --> RAG[RAG Service :8008]
+
+  Product --> MySQL[(MySQL products_db)]
+  User --> MySQLUsers[(MySQL users_db)]
+  Cart --> MySQLCarts[(MySQL carts_db)]
+  Cart --> Redis[(Redis)]
+  Order --> PostgresOrders[(PostgreSQL orders_db)]
+  Payment --> PostgresPayments[(PostgreSQL payments_db)]
+  Shipping --> PostgresShipping[(PostgreSQL shipping_db)]
+  AI --> MySQLAI[(MySQL ai_service_db)]
+  AI --> Neo4j[(Neo4j)]
+  RAG --> Neo4j
+  RAG --> FAISS[(FAISS index volume)]
+
+  Cart -- product lookup --> Product
+  Order -- fetch active cart --> Cart
+  Order -- reduce stock --> Product
+  Shipping -- fetch order --> Order
+  AI -- RAG scores --> RAG
+  RAG -- enrich products --> Product
+
+  Order -- order events --> RabbitMQ[(RabbitMQ)]
+  Payment -- payment events --> RabbitMQ
+  Shipping -- shipment events --> RabbitMQ
+  RabbitMQ --> OrderWorker[Order Consumer]
+  RabbitMQ --> ShippingWorker[Shipping Consumer]
+  OrderWorker --> Order
+  ShippingWorker --> Shipping
+

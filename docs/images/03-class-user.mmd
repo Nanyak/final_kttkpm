@@ -1,0 +1,14 @@
+classDiagram
+  class Role { +int id +string name +text description +datetime created_at }
+  class User { +int id +username +email +password_hash +first_name +last_name +phone_number +is_active +is_verified +last_login +created_at +updated_at }
+  class UserAddress { +recipient_name +phone_number +address_line1 +address_line2 +district +city +province +postal_code +is_default +created_at }
+  class RegisterSerializer { +username +email +password +first_name +last_name +phone_number }
+  class LoginSerializer { +username +password }
+  class AuthViews { +register() +login() +refresh() +logout() +me() +change_password() }
+  class UserService { +hash_password() +verify_password() +generate_access_token() +generate_refresh_token() +decode_token() +register_user() +login_user() }
+  Role "1" <-- "0..*" User
+  User "1" *-- "0..*" UserAddress
+  AuthViews ..> UserService
+  AuthViews ..> RegisterSerializer
+  AuthViews ..> LoginSerializer
+
