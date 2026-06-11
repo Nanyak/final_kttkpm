@@ -18,6 +18,9 @@ export interface Product {
   category: number
   category_name: string
   image_url?: string | null
+  created_at?: string
+  updated_at?: string
+  product_type?: string
 }
 
 export interface CartItem {
@@ -39,13 +42,19 @@ export interface Cart {
 export interface Order {
   id: number
   order_number: string
+  user_id?: number
   status: string
   total_amount: string
+  subtotal?: string
+  shipping_fee?: string
+  discount_amount?: string
   payment_status: string
   ordered_at: string
+  updated_at?: string
   items?: OrderItem[]
   shipping_address?: Record<string, string>
   payment_method?: string
+  notes?: string
 }
 
 export interface OrderItem {
@@ -64,6 +73,12 @@ export interface User {
   email: string
   first_name: string
   last_name: string
+  phone_number?: string
+  is_active?: boolean
+  is_verified?: boolean
   role: number | string
   role_name?: string
+  last_login?: string | null
+  created_at?: string
+  updated_at?: string
 }

@@ -37,9 +37,8 @@ Recommendation quality is built from multiple independent signals:
 - Neo4j graph scores from product/user relationships.
 - RAG semantic scores from product text and graph-expanded context.
 
-The weights are configurable with `LSTM_WEIGHT`, `GRAPH_WEIGHT`, and `RAG_WEIGHT`.
+The weights are configurable with `SEQUENCE_MODEL_WEIGHT`, `GRAPH_WEIGHT`, and `RAG_WEIGHT`.
 
 ## Operational Boundaries
 
 The system is intended to run with Docker Compose. Databases, RabbitMQ, Redis, Neo4j, Django services, workers, frontend, and gateway are declared in `docker-compose.yml`. Memory limits are configurable through environment variables.
-

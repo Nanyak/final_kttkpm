@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
-from .models import User, UserAddress
+from .models import Role, User, UserAddress
 from .serializers import (
     UserSerializer, UserAddressSerializer, RegisterSerializer,
     LoginSerializer, ChangePasswordSerializer,
@@ -188,3 +188,41 @@ class AdminUserDetailView(APIView):
             return err('Forbidden', status.HTTP_403_FORBIDDEN)
         target = get_object_or_404(User, pk=pk)
         return ok(UserSerializer(target).data)
+
+    def patch(self, request, pk):
+        user, error = require_auth(request)
+        if error:
+            return error
+        if user.role.name != 'admin':
+            return err('Forbidden', status.HTTP_403_FORBIDDEN)
+        target = get_object_or_404(User, pk=pk)
+        allowed = ['first_name', 'last_name', 'phone_number', 'email', 'is_active']
+        for field in allowed:
+            if field in request.data:
+                setattr(target, field, request.data[field])
+        if 'role' in request.data or 'role_name' in request.data:
+            role_value = request.data.get('role_name') or request.data.get('role')
+            try:
+                if isinstance(role_value, int) or str(role_value).isdigit():
+                    target.role = Role.objects.get(pk=role_value)
+                else:
+                    target.role = Role.objects.get(name=role_value)
+            except Role.DoesNotExist:
+                return err('Role not found', status.HTTP_404_NOT_FOUND)
+        try:
+            target.save()
+        except IntegrityError:
+            return err('Email already in use', status.HTTP_409_CONFLICT)
+        return ok(UserSerializer(target).data)
+
+    def delete(self, request, pk):
+        user, error = require_auth(request)
+        if error:
+            return error
+        if user.role.name != 'admin':
+            return err('Forbidden', status.HTTP_403_FORBIDDEN)
+        if user.id == pk:
+            return err('Admins cannot delete their own account')
+        target = get_object_or_404(User, pk=pk)
+        target.delete()
+        return ok({'deleted': True}, status.HTTP_204_NO_CONTENT)

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { ProductCard } from '../components/ui/ProductCard'
-import { categoriesAPI, productsAPI, aiAPI, aiResultToProduct } from '../lib/api'
+import { categoriesAPI, productsAPI, aiAPI } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
 import type { Category, Product } from '../types'
 
@@ -32,8 +32,20 @@ export function HomePage() {
     if (!user) return
     setRecsLoading(true)
     aiAPI.recommend(user.id, undefined, 6).then((res) => {
-      const items = (res.data.results ?? []).map(aiResultToProduct)
-      setRecommendations(items)
+      const aiItems = res.data.results ?? []
+      const ids = Array.from(new Set(aiItems.map((item) => item.product_id))).filter(Boolean)
+      if (ids.length === 0) {
+        setRecommendations([])
+        return
+      }
+
+      return productsAPI.list({ ids: ids.join(','), is_active: true }).then((prodRes) => {
+        const productsById = new Map((Array.isArray(prodRes.data) ? prodRes.data : []).map((product) => [product.id, product]))
+        const items = aiItems
+          .map((item) => productsById.get(item.product_id))
+          .filter((product): product is Product => Boolean(product))
+        setRecommendations(items)
+      })
     }).catch(() => {}).finally(() => setRecsLoading(false))
   }, [user])
 

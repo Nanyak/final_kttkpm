@@ -18,4 +18,4 @@ COPY . .
 RUN mkdir -p data/models data/faiss
 
 EXPOSE 8007
-CMD sh -c "python manage.py makemigrations behavior --noinput && python manage.py migrate --noinput && python manage.py seed_data && python manage.py train_lstm && python manage.py setup_graph && python manage.py runserver 0.0.0.0:$SERVICE_PORT"
+CMD sh -c "python manage.py makemigrations behavior --noinput && python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:$SERVICE_PORT"

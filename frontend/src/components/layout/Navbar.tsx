@@ -29,6 +29,8 @@ export function Navbar() {
     { to: '/', label: 'Home' },
     { to: '/products', label: 'Products' },
   ]
+  const isAdmin = user?.role === 'admin' || user?.role_name === 'admin'
+  const visibleNavLinks = isAdmin ? [...navLinks, { to: '/admin', label: 'Admin' }] : navLinks
 
   return (
     <nav
@@ -84,7 +86,7 @@ export function Navbar() {
           }}
           className="nav-links-desktop"
         >
-          {navLinks.map((link) => (
+          {visibleNavLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
@@ -205,6 +207,25 @@ export function Navbar() {
                   >
                     My Orders
                   </Link>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setUserMenuOpen(false)}
+                      style={{
+                        display: 'block',
+                        padding: '8px 12px',
+                        borderRadius: '8px',
+                        fontSize: 'var(--text-body)',
+                        color: 'var(--color-obsidian)',
+                        fontFamily: 'var(--font-body)',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--color-powder)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      Admin
+                    </Link>
+                  )}
                   <button
                     onClick={() => { logout(); setUserMenuOpen(false) }}
                     style={{
@@ -284,7 +305,7 @@ export function Navbar() {
             background: 'var(--color-eggshell)',
           }}
         >
-          {navLinks.map((link) => (
+          {visibleNavLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}

@@ -85,14 +85,19 @@ MODEL_DIR = BASE_DIR / 'data' / 'models'
 FAISS_DIR = BASE_DIR / 'data' / 'faiss'
 
 # ─── Hybrid weights ──────────────────────────────────────────
-LSTM_WEIGHT  = float(os.environ.get('LSTM_WEIGHT',  '0.4'))
+SEQUENCE_MODEL_WEIGHT = float(os.environ.get(
+    'SEQUENCE_MODEL_WEIGHT',
+    os.environ.get('LSTM_WEIGHT', '0.4'),
+))
+# Deprecated alias kept for older code/env files.
+LSTM_WEIGHT = SEQUENCE_MODEL_WEIGHT
 GRAPH_WEIGHT = float(os.environ.get('GRAPH_WEIGHT', '0.35'))
 RAG_WEIGHT   = float(os.environ.get('RAG_WEIGHT',   '0.25'))
 TOP_N        = int(os.environ.get('TOP_N', '10'))
 
 # Active sequence model: rnn | lstm | bilstm | gru | narm | sasrec | bert4rec
 # Run `python manage.py train_models` to compare, then set this to the winner.
-ACTIVE_MODEL = os.environ.get('ACTIVE_MODEL', 'lstm')
+ACTIVE_MODEL = os.environ.get('ACTIVE_MODEL', 'gru')
 
 # ─── RAG Service ─────────────────────────────────────────────
 # Internal docker-network URL (not exposed through nginx)

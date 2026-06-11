@@ -58,7 +58,7 @@ class CategoryDetailView(APIView):
 
 class ProductListView(APIView):
     def get(self, request):
-        qs = Product.objects.select_related('category').all()
+        qs = Product.objects.select_related('category', 'category__parent', 'category__parent__parent').all()
         category_id = request.query_params.get('category_id')
         is_active = request.query_params.get('is_active')
         search = request.query_params.get('search')
@@ -89,7 +89,10 @@ class ProductListView(APIView):
 
 class ProductDetailView(APIView):
     def get(self, request, pk):
-        product = get_object_or_404(Product, pk=pk)
+        product = get_object_or_404(
+            Product.objects.select_related('category', 'category__parent', 'category__parent__parent'),
+            pk=pk,
+        )
         return ok(ProductSerializer(product).data)
 
     def patch(self, request, pk):

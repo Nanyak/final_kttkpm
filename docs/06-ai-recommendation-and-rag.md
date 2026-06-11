@@ -8,10 +8,10 @@
 | Component | Location | Responsibility |
 |---|---|---|
 | Behavior app | `ai_service/apps/behavior` | Stores product metadata and user behavior events. |
-| Recommendations app | `ai_service/apps/recommendations` | Combines sequence, graph, and RAG scores. |
+| Recommendations app | `ai_service/apps/recommendations` | Combines active sequence-model, graph, and RAG scores. |
 | ML models | `ai_service/ml` | RNN, LSTM, BiLSTM, GRU, NARM, SASRec, and BERT4Rec implementations/training helpers. |
 | Graph layer | `ai_service/graph`, `rag_service/graph` | Neo4j product/user behavior queries. |
-| RAG retriever | `rag_service/rag` | FAISS semantic search, graph expansion, context building, answer generation. |
+| RAG retriever | `rag_service/rag` | Dense FAISS search, sparse TF-IDF search, graph expansion, context building, answer generation. |
 | Chatbot endpoint | `rag_service/apps/chatbot` | Public conversational product assistant. |
 | RAG scores endpoint | `rag_service/apps/scores` | Internal scoring endpoint for AI Service. |
 
@@ -23,7 +23,7 @@ final_score = w1 * sequence_score + w2 * graph_score + w3 * rag_score
 
 Default Docker Compose weights:
 
-- `LSTM_WEIGHT=0.4`
+- `SEQUENCE_MODEL_WEIGHT=0.4`
 - `GRAPH_WEIGHT=0.35`
 - `RAG_WEIGHT=0.25`
 
@@ -44,10 +44,12 @@ Weights passed as `w1`, `w2`, and `w3` are normalized before scoring.
 
 RAG Service combines:
 
-1. FAISS semantic product search from the text query.
-2. Neo4j graph scores for the user when `user_id` is provided.
-3. Similar-product expansion from top FAISS hits through graph edges.
-4. Product metadata enrichment through Product Service.
+1. Dense FAISS semantic product search from the text query.
+2. Sparse TF-IDF lexical search for exact names, brands, and model numbers.
+3. Reciprocal Rank Fusion (RRF) over dense and sparse rankings.
+4. Neo4j graph scores for the user when `user_id` is provided.
+5. Similar-product expansion from top retrieval hits through graph edges.
+6. Product metadata enrichment through Product Service.
 
 The chatbot uses retrieved context with OpenAI when `OPENAI_API_KEY` is present. Without an API key, it returns a deterministic fallback answer from the retrieved product context.
 

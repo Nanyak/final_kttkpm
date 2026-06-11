@@ -1,0 +1,86 @@
+[
+  {
+    "id": "faq_001",
+    "title": "How do I track my order?",
+    "content": "To track your order: (1) Log in to your account and go to 'My Orders'. (2) Click on the order you want to track. (3) A tracking number and carrier link will be shown once the order has been shipped, usually within 1 business day. You will also receive a tracking link via email and SMS when your order is dispatched. Để theo dõi đơn hàng: đăng nhập vào tài khoản, vào 'Đơn của tôi', chọn đơn cần theo dõi. Mã vận đơn và link theo dõi sẽ hiển thị sau khi đơn được giao cho đơn vị vận chuyển.",
+    "category": "orders",
+    "keywords": ["track order", "tracking", "where is my order", "shipment status", "theo dõi đơn hàng", "mã vận đơn", "đơn hàng ở đâu", "trạng thái đơn hàng"]
+  },
+  {
+    "id": "faq_002",
+    "title": "What do I do if I received a wrong or damaged item?",
+    "content": "If you received a wrong item or a damaged/defective product, please: (1) Take clear photos of the item and packaging. (2) Contact our support team within 48 hours of delivery. (3) Provide your order number and the photos. We will arrange a free return pickup and send the correct item or issue a full refund within 3 business days. Nếu nhận nhầm hàng hoặc hàng bị hỏng: chụp ảnh rõ hàng và bao bì, liên hệ hỗ trợ trong vòng 48 giờ kèm mã đơn hàng và ảnh. Chúng tôi sẽ lấy hàng về miễn phí và gửi hàng đúng hoặc hoàn tiền trong 3 ngày làm việc.",
+    "category": "orders",
+    "keywords": ["wrong item", "damaged item", "defective", "incorrect order", "nhận nhầm hàng", "hàng bị hỏng", "hàng lỗi", "hàng sai"]
+  },
+  {
+    "id": "faq_003",
+    "title": "How do I create an account?",
+    "content": "To create an account: click 'Sign Up' at the top of the page, enter your email address, choose a password, and verify your email. You can also sign up using your Google or Facebook account for faster registration. Having an account lets you track orders, save wishlists, earn loyalty points, and get personalized recommendations. Để tạo tài khoản: nhấp 'Đăng ký' ở đầu trang, nhập email, chọn mật khẩu và xác minh email. Bạn cũng có thể đăng ký qua Google hoặc Facebook. Tài khoản giúp bạn theo dõi đơn hàng, lưu danh sách yêu thích và nhận gợi ý cá nhân hóa.",
+    "category": "account",
+    "keywords": ["create account", "sign up", "register", "tạo tài khoản", "đăng ký", "lập tài khoản"]
+  },
+  {
+    "id": "faq_004",
+    "title": "How do I reset my password?",
+    "content": "To reset your password: click 'Forgot Password' on the login page, enter your registered email address, and check your inbox for a reset link. The reset link expires in 30 minutes. If you do not receive the email, check your spam folder or contact support. Để đặt lại mật khẩu: nhấp 'Quên mật khẩu' ở trang đăng nhập, nhập email đã đăng ký và kiểm tra hộp thư để nhận liên kết đặt lại. Liên kết hết hạn sau 30 phút.",
+    "category": "account",
+    "keywords": ["reset password", "forgot password", "change password", "quên mật khẩu", "đặt lại mật khẩu", "đổi mật khẩu"]
+  },
+  {
+    "id": "faq_005",
+    "title": "Can I change my delivery address after placing an order?",
+    "content": "You can change the delivery address within 1 hour of placing your order, before it is assigned to a courier. To change it, go to 'My Orders', select the order, and click 'Edit Address'. After 1 hour, contact our support team as soon as possible — changes may not be possible if the order is already in transit. Bạn có thể đổi địa chỉ giao hàng trong vòng 1 giờ sau khi đặt. Vào 'Đơn của tôi', chọn đơn và nhấn 'Sửa địa chỉ'. Sau 1 giờ, hãy liên hệ hỗ trợ ngay — thay đổi có thể không thực hiện được nếu hàng đã được lấy đi.",
+    "category": "orders",
+    "keywords": ["change address", "delivery address", "shipping address", "đổi địa chỉ", "thay đổi địa chỉ giao hàng"]
+  },
+  {
+    "id": "faq_006",
+    "title": "How do I use a voucher or coupon code?",
+    "content": "To use a voucher or coupon code: add items to your cart, proceed to checkout, and enter your code in the 'Voucher / Promo Code' field before confirming payment. Only one voucher can be applied per order. Vouchers cannot be combined with already-discounted items unless stated otherwise. Check the voucher terms for minimum order value or category restrictions. Để dùng mã giảm giá: thêm hàng vào giỏ, vào thanh toán, nhập mã vào ô 'Mã giảm giá / Voucher'. Mỗi đơn chỉ dùng được một mã. Kiểm tra điều kiện của mã về giá trị đơn tối thiểu và danh mục áp dụng.",
+    "category": "promotions",
+    "keywords": ["voucher", "coupon", "promo code", "discount code", "mã giảm giá", "mã coupon", "mã khuyến mãi", "nhập mã"]
+  },
+  {
+    "id": "faq_007",
+    "title": "How does the loyalty points system work?",
+    "content": "You earn 1 loyalty point for every 1,000 VND spent. Points are credited to your account 7 days after delivery (to allow for returns). Points can be redeemed at checkout — 100 points = 1,000 VND discount. Points expire 12 months after they are earned. Check your points balance in 'My Account > Loyalty Points'. Bạn nhận được 1 điểm tích lũy cho mỗi 1,000 VND chi tiêu. Điểm được cộng sau 7 ngày giao hàng. 100 điểm = 1,000 VND giảm khi thanh toán. Điểm hết hạn sau 12 tháng kể từ ngày nhận.",
+    "category": "promotions",
+    "keywords": ["loyalty points", "reward points", "điểm tích lũy", "tích điểm", "đổi điểm", "điểm thưởng", "quy đổi điểm"]
+  },
+  {
+    "id": "faq_008",
+    "title": "How do I contact customer support?",
+    "content": "You can reach our customer support team through: (1) Live chat on the website (available 8 AM – 10 PM daily). (2) Email: support@shop.vn (response within 24 hours). (3) Hotline: 1800-xxxx (toll-free, 8 AM – 8 PM Mon–Sat). (4) Facebook Messenger / Zalo. Our support team speaks both Vietnamese and English. Liên hệ hỗ trợ qua: live chat trên website (8h–22h hàng ngày), email support@shop.vn (phản hồi trong 24h), đường dây nóng 1800-xxxx (miễn phí, 8h–20h Thứ 2–Thứ 7), hoặc Facebook Messenger / Zalo.",
+    "category": "support",
+    "keywords": ["contact support", "customer service", "help", "hotline", "liên hệ", "hỗ trợ khách hàng", "tổng đài", "chat", "email hỗ trợ"]
+  },
+  {
+    "id": "faq_009",
+    "title": "Is my payment information secure?",
+    "content": "Yes. All payments are processed through PCI-DSS compliant payment gateways. We use SSL/TLS encryption for all transactions. We never store your full card number on our servers — only a masked token is kept for convenience. For extra security, you can enable two-factor authentication (2FA) on your account. Có. Mọi thanh toán được xử lý qua cổng thanh toán đạt chuẩn PCI-DSS với mã hóa SSL/TLS. Chúng tôi không lưu trữ số thẻ đầy đủ. Bạn có thể bật xác thực hai bước (2FA) để bảo mật tài khoản.",
+    "category": "payment",
+    "keywords": ["secure payment", "safe", "security", "card security", "bảo mật thanh toán", "an toàn", "mã hóa", "an toàn thẻ"]
+  },
+  {
+    "id": "faq_010",
+    "title": "How do personalized recommendations work?",
+    "content": "Our recommendation system analyzes your browsing history, purchase history, and items you've rated or added to your wishlist. It then suggests products you're likely to enjoy using a hybrid AI model that combines collaborative filtering (what similar shoppers bought) and content-based matching (products with features you've shown interest in). You can clear your recommendation history in 'Account Settings > Privacy'. Hệ thống gợi ý phân tích lịch sử duyệt, mua hàng và đánh giá của bạn, sau đó dùng mô hình AI kết hợp để đề xuất sản phẩm phù hợp. Bạn có thể xóa lịch sử gợi ý trong 'Cài đặt tài khoản > Quyền riêng tư'.",
+    "category": "features",
+    "keywords": ["recommendations", "personalized", "AI", "suggestion", "gợi ý", "gợi ý cá nhân", "đề xuất sản phẩm", "AI gợi ý"]
+  },
+  {
+    "id": "faq_011",
+    "title": "Can I buy without creating an account (guest checkout)?",
+    "content": "Yes, you can checkout as a guest without creating an account. Simply add items to your cart and proceed to checkout — select 'Continue as Guest' and enter your name, email, and delivery address. Note: guest orders cannot be tracked from an account dashboard; tracking is only available via the link sent to your email. Có, bạn có thể mua hàng mà không cần tài khoản. Chọn 'Tiếp tục với tư cách khách' khi thanh toán và nhập thông tin cần thiết. Lưu ý: đơn hàng khách chỉ theo dõi được qua link gửi đến email của bạn.",
+    "category": "account",
+    "keywords": ["guest checkout", "buy without account", "no account", "mua không cần tài khoản", "thanh toán khách", "không đăng nhập"]
+  },
+  {
+    "id": "faq_012",
+    "title": "What are the product categories available?",
+    "content": "Our store carries four main categories: (1) Electronics — Smartphones, Laptops, Earbuds/Headphones, Power Banks, Bluetooth Speakers, and Home Appliances (Rice Cookers, Air Fryers, Ovens, Microwaves). (2) Fashion — Clothing (shirts, jackets, jeans, hoodies), Shoes (sneakers, casual, sport), Bags (backpacks, tote bags, handbags). (3) Books — Software Engineering, Data Science, Cookbooks. (4) Home & Living — Kitchen & Dining, Lighting, Storage & Organization, Home Decor. (5) Sports & Outdoors — Fitness equipment, Running gear, Cycling, Camping. Cửa hàng có 5 danh mục: Điện tử, Thời trang, Sách, Đồ gia dụng & Nội thất, Thể thao & Ngoài trời.",
+    "category": "products",
+    "keywords": ["categories", "product types", "what do you sell", "danh mục", "loại sản phẩm", "điện tử", "thời trang", "sách", "đồ gia dụng", "thể thao"]
+  }
+]

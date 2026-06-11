@@ -21,12 +21,13 @@ classDiagram
     -user_id : int
     -query : String
     -final_score : Float
-    -lstm_score : Float
+    -sequence_model_score : Float
     -graph_score : Float
     -rag_score : Float
   }
   class HybridRetriever {
-    -faiss_weight : Float
+    -dense_weight : Float
+    -sparse_weight : Float
     -graph_weight : Float
     -top_k : int
   }

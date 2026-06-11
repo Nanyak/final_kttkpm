@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { getToken } from './auth'
-import type { Category, Product, Cart, Order } from '../types'
+import type { Category, Product, Cart, Order, User } from '../types'
 
 export interface AIRecommendResult {
   product_id: number
   final_score: number
+  sequence_model_score?: number
+  lstm_score?: number
   name: string
   category: string
   price: number
@@ -67,10 +69,16 @@ export const categoriesAPI = {
 
 // Products
 export const productsAPI = {
-  list: (params?: { category_id?: number | string; search?: string; is_active?: boolean }) =>
+  list: (params?: { category_id?: number | string; search?: string; ids?: string; is_active?: boolean }) =>
     api.get<Product[]>('/products/', { params }),
 
   detail: (id: number | string) => api.get<Product>(`/products/${id}/`),
+
+  create: (data: ProductPayload) => api.post<Product>('/products/', data),
+
+  update: (id: number | string, data: Partial<ProductPayload>) => api.patch<Product>(`/products/${id}/`, data),
+
+  delete: (id: number | string) => api.delete(`/products/${id}/`),
 }
 
 // Cart
@@ -90,10 +98,36 @@ export const cartAPI = {
 export const ordersAPI = {
   list: () => api.get<Order[]>('/orders/'),
 
+  adminList: () => api.get<Order[]>('/orders/admin/'),
+
   create: (data: { shipping_address: Record<string, string>; payment_method: string }) =>
     api.post<Order>('/orders/', data),
 
   detail: (id: number | string) => api.get<Order>(`/orders/${id}/`),
+
+  update: (id: number | string, data: Partial<Pick<Order, 'status' | 'payment_status' | 'notes'>>) =>
+    api.patch<Order>(`/orders/${id}/`, data),
+}
+
+export interface ProductPayload {
+  name: string
+  description: string
+  base_price: string
+  stock_quantity: number
+  category: number
+  is_active: boolean
+  image_url?: string | null
+}
+
+export const usersAPI = {
+  adminList: () => api.get<User[]>('/users/'),
+
+  adminDetail: (id: number | string) => api.get<User>(`/users/${id}/`),
+
+  update: (id: number | string, data: Partial<Pick<User, 'first_name' | 'last_name' | 'email' | 'phone_number' | 'is_active' | 'role' | 'role_name'>>) =>
+    api.patch<User>(`/users/${id}/`, data),
+
+  delete: (id: number | string) => api.delete(`/users/${id}/`),
 }
 
 // AI Service

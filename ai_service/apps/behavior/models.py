@@ -7,7 +7,7 @@ class Product(models.Model):
     description  = models.TextField(default='')
     category     = models.CharField(max_length=100, default='')
     price        = models.FloatField(default=0.0)
-    encoded_id   = models.IntegerField(null=True, blank=True)  # index in LSTM vocab
+    encoded_id   = models.IntegerField(null=True, blank=True)  # index in sequence-model vocab
 
     class Meta:
         db_table = 'ai_products'

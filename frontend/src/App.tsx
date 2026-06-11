@@ -14,6 +14,7 @@ import { RegisterPage } from './pages/RegisterPage'
 import { OrdersPage } from './pages/OrdersPage'
 import { OrderDetailPage } from './pages/OrderDetailPage'
 import { OrderConfirmationPage } from './pages/OrderConfirmationPage'
+import { AdminPage } from './pages/AdminPage'
 
 function Layout() {
   return (
@@ -57,6 +58,44 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location.pathname }} replace />
+  }
+
+  return <>{children}</>
+}
+
+function AdminRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, user, loading } = useAuth()
+  const location = useLocation()
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          minHeight: '60vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            background: 'var(--gradient-voice-spectrum)',
+            animation: 'spin 1s linear infinite',
+          }}
+        />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />
+  }
+
+  if (user?.role !== 'admin' && user?.role_name !== 'admin') {
+    return <Navigate to="/" replace />
   }
 
   return <>{children}</>
@@ -111,6 +150,14 @@ function AppRoutes() {
             <ProtectedRoute>
               <OrderConfirmationPage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
           }
         />
       </Route>

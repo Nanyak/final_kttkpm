@@ -1,5 +1,5 @@
 """
-Chatbot endpoint — Hybrid RAG (FAISS + Neo4j) + LLM.
+Chatbot endpoint — Hybrid RAG (dense FAISS + sparse TF-IDF + Neo4j) + LLM.
 
 POST /api/ai/chatbot/
 {
@@ -15,6 +15,8 @@ Flow
 ----
 1. HybridRetriever.get_context_and_scores()
       FAISS semantic search  (query → similar products)
+   +  TF-IDF lexical search  (query → exact product/brand/model matches)
+   +  short-session user history
    +  Neo4j graph context    (user history → related products)
    →  merged context string + {product_id: score}
 
@@ -24,6 +26,7 @@ Flow
 
 3. Enrich product scores with metadata and return ranked list
 """
+import re
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -63,8 +66,9 @@ class ChatbotView(APIView):
             )
 
         retriever = get_hybrid_retriever()
+        retrieval_query = _build_session_retrieval_query(query, history)
         context, product_scores = retriever.get_context_and_scores(
-            query=query, user_id=uid, top_k=settings.TOP_K,
+            query=retrieval_query, user_id=uid, top_k=settings.TOP_K,
         )
 
         # ── 2. LLM generation ────────────────────────────────────
@@ -77,12 +81,18 @@ class ChatbotView(APIView):
                     history=history,
                 )
             except Exception:
-                answer = generate_fallback(query, context)
+                answer = generate_fallback(query, context, history=history)
         else:
-            answer = generate_fallback(query, context)
+            answer = generate_fallback(query, context, history=history)
 
-        # ── 3. Enrich top products with metadata ─────────────────
-        recommended = _enrich(product_scores, top_n=5)
+        # ── 3. Build recommended cards from the same context lines shown in the answer ──
+        q_lower = query.lower()
+        wants_cheaper = any(kw in q_lower for kw in (
+            'cheaper', 'less expensive', 'lower price', 'more affordable', 'budget',
+            'rẻ hơn', 're hon', 'giá thấp hơn', 'ít tiền hơn',
+        ))
+        display_pids = _pids_from_context(context, wants_cheaper=wants_cheaper, top_n=3)
+        recommended  = _enrich_ordered(display_pids, product_scores)
 
         return Response({
             'query':        query,
@@ -92,40 +102,94 @@ class ChatbotView(APIView):
         })
 
 
-def _enrich(scores: dict, top_n: int = 5) -> list:
+def _pids_from_context(context: str, wants_cheaper: bool = False, top_n: int = 3) -> list:
     """
-    Attach product metadata to the top-N scored products by calling
-    product_service API.  Falls back to bare product_id if the call fails.
+    Extract product IDs from context in display order.
+    Deduplicates by pid, sorts by price ascending when wants_cheaper.
+    This ensures card order matches the text answer exactly.
+    """
+    items = []
+    seen  = set()
+    for line in context.split('\n'):
+        m = re.search(r'\[ID:(\d+)\]', line)
+        if not m:
+            continue
+        pid = int(m.group(1))
+        if pid in seen:
+            continue
+        seen.add(pid)
+        price = float('inf')
+        if wants_cheaper:
+            pm = re.search(r'(\d[\d,]+)\s*VND', line, re.IGNORECASE)
+            if pm:
+                try:
+                    price = float(pm.group(1).replace(',', ''))
+                except ValueError:
+                    pass
+        items.append((pid, price))
+
+    if wants_cheaper:
+        items.sort(key=lambda x: x[1])
+
+    return [pid for pid, _ in items[:top_n]]
+
+
+def _enrich_ordered(pids: list, scores: dict) -> list:
+    """
+    Attach metadata to a specific ordered list of product IDs.
+    Cards are returned in the same order as pids.
     """
     import logging
-    from django.conf import settings
     from rag.product_api import fetch_products_by_ids
 
-    top_pids   = sorted(scores, key=scores.get, reverse=True)[:top_n]
     meta: dict = {}
-
     try:
         from rag.retriever import get_retriever
         retriever = get_retriever()
         if retriever:
-            meta = {pid: retriever.get_metadata(pid) for pid in top_pids}
+            meta = {pid: retriever.get_metadata(pid) for pid in pids}
     except Exception:
         meta = {}
 
     try:
-        meta.update(fetch_products_by_ids(settings.PRODUCT_SERVICE_URL, top_pids))
+        meta.update(fetch_products_by_ids(settings.PRODUCT_SERVICE_URL, pids))
     except Exception as exc:
         logging.getLogger(__name__).warning('Could not enrich from product_service: %s', exc)
 
     result = []
-    for pid in top_pids:
+    for pid in pids:
         p = meta.get(pid, {})
         result.append({
             'product_id':   pid,
-            'hybrid_score': round(scores[pid], 4),
+            'hybrid_score': round(scores.get(pid, 0.0), 4),
             'name':         p.get('name',          f'Product {pid}'),
             'category':     p.get('category_name') or p.get('category', ''),
             'price':        p.get('base_price') or p.get('price', 0.0),
             'description':  p.get('description',   ''),
         })
     return result
+
+
+def _build_session_retrieval_query(query: str, history: list, max_turns: int = 3) -> str:
+    """
+    Build short-term retrieval memory from recent user turns.
+
+    The frontend already sends per-widget message history. The backend remains
+    stateless, but retrieval should still see recent constraints like
+    "winter jacket" when the next message says "for women".
+    """
+    if not history:
+        return query
+
+    user_turns = []
+    for item in history:
+        if not isinstance(item, dict) or item.get('role') != 'user':
+            continue
+        content = str(item.get('content', '')).strip()
+        if content:
+            user_turns.append(content[:180])
+
+    recent = user_turns[-max_turns:]
+    if not recent:
+        return query
+    return ' '.join(recent + [query])

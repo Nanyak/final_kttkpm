@@ -42,5 +42,4 @@ The public entrypoint is the Nginx gateway on port `8000`. It serves the React f
 
 ## AI/RAG Path
 
-The AI service combines sequence-model scores, Neo4j graph scores, and RAG scores. The RAG service separately provides chatbot answers and internal RAG score retrieval by merging FAISS semantic search with Neo4j graph context. OpenAI generation is optional; when no key is configured, the chatbot falls back to a template answer from retrieved context.
-
+The AI service combines sequence-model scores, Neo4j graph scores, and RAG scores. The RAG service separately provides chatbot answers and internal RAG score retrieval by rank-fusing dense FAISS semantic search and sparse TF-IDF lexical search with RRF, then merging that retrieval signal with Neo4j graph context. OpenAI generation is optional; when no key is configured, the chatbot falls back to a template answer from retrieved context.

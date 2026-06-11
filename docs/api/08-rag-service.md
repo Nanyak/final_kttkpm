@@ -24,5 +24,4 @@ Internal score base path: `/api/rag/scores/` on `rag_service:8008`.
 }
 ```
 
-Response fields: `query`, `answer`, `context_used`, and `recommended`. Retrieval combines FAISS semantic hits, Neo4j user/product graph scores, and product metadata from Product Service.
-
+Response fields: `query`, `answer`, `context_used`, and `recommended`. Retrieval uses RRF over dense FAISS semantic hits and sparse TF-IDF lexical hits, then merges that retrieval signal with Neo4j user/product graph scores and product metadata from Product Service.

@@ -58,6 +58,29 @@ class OrderDetailView(APIView):
             return err('Forbidden', status.HTTP_403_FORBIDDEN)
         return ok(OrderSerializer(order).data)
 
+    def patch(self, request, pk):
+        user, error = require_auth(request)
+        if error:
+            return error
+        if user.get('role') != 'admin':
+            return err('Forbidden', status.HTTP_403_FORBIDDEN)
+        order = get_object_or_404(Order, pk=pk)
+        new_status = request.data.get('status')
+        payment_status = request.data.get('payment_status')
+        notes = request.data.get('notes')
+        if new_status:
+            if new_status not in dict(Order.STATUS_CHOICES):
+                return err('Invalid status')
+            order.status = new_status
+        if payment_status:
+            if payment_status not in dict(Order.PAYMENT_STATUS_CHOICES):
+                return err('Invalid payment_status')
+            order.payment_status = payment_status
+        if notes is not None:
+            order.notes = notes
+        order.save()
+        return ok(OrderSerializer(order).data)
+
 
 class OrderCancelView(APIView):
     def post(self, request, pk):

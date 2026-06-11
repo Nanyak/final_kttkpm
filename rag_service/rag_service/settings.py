@@ -56,11 +56,15 @@ NEO4J_PASSWORD = os.environ.get('NEO4J_PASSWORD', 'neo4jpassword')
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
 OPENAI_MODEL   = os.environ.get('OPENAI_MODEL',   'gpt-4o-mini')
 
-# ─── Embeddings / FAISS ───────────────────────────────────────
+# ─── Retrieval indexes ────────────────────────────────────────
 EMBED_MODEL = os.environ.get('EMBED_MODEL', 'paraphrase-multilingual-MiniLM-L12-v2')
 FAISS_DIR   = BASE_DIR / 'data' / 'faiss'
 
 # ─── Hybrid retrieval weights ─────────────────────────────────
-FAISS_WEIGHT = float(os.environ.get('FAISS_WEIGHT', '0.6'))
+DENSE_WEIGHT = float(os.environ.get('DENSE_WEIGHT', os.environ.get('FAISS_WEIGHT', '0.6')))
+SPARSE_WEIGHT = float(os.environ.get('SPARSE_WEIGHT', '0.25'))
+# Deprecated alias kept for older env files/docs.
+FAISS_WEIGHT = DENSE_WEIGHT
 GRAPH_WEIGHT = float(os.environ.get('GRAPH_WEIGHT', '0.4'))
+RRF_K        = int(os.environ.get('RRF_K', '60'))
 TOP_K        = int(os.environ.get('TOP_K', '10'))

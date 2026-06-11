@@ -2,7 +2,7 @@
 RAG scores endpoint — called internally by ai_service to get
 RAG / graph-RAG scores for the hybrid recommendation formula:
 
-    hybrid = w_dl * dl_score + w_graph * graph_score + w_rag * rag_score
+    hybrid = rrf(dense_rank, sparse_rank) + graph_score
 
 GET /api/rag/scores/?query=<str>&top_k=<int>[&user_id=<int>]
 Returns: {"scores": {"product_id": score, ...}}

@@ -29,6 +29,8 @@ class FashionSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
+    category_root = serializers.SerializerMethodField()
+    category_path = serializers.SerializerMethodField()
     book = BookSerializer(required=False, allow_null=True)
     electronics = ElectronicsSerializer(required=False, allow_null=True)
     fashion = FashionSerializer(required=False, allow_null=True)
@@ -37,9 +39,22 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'slug', 'description', 'base_price', 'stock_quantity',
-                  'is_active', 'image_url', 'category', 'category_name', 'created_at', 'updated_at',
-                  'book', 'electronics', 'fashion', 'product_type']
+                  'is_active', 'image_url', 'category', 'category_name', 'category_root',
+                  'category_path', 'created_at', 'updated_at', 'book', 'electronics',
+                  'fashion', 'product_type']
         read_only_fields = ['slug', 'created_at', 'updated_at']
+
+    def get_category_path(self, obj):
+        names = []
+        category = obj.category
+        while category:
+            names.append(category.name)
+            category = category.parent
+        return list(reversed(names))
+
+    def get_category_root(self, obj):
+        path = self.get_category_path(obj)
+        return path[0] if path else ''
 
     def get_product_type(self, obj):
         if hasattr(obj, 'book'):

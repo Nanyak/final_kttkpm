@@ -1,0 +1,51 @@
+[
+  {
+    "id": "guide_001",
+    "title": "How to Choose the Right Laptop",
+    "content": "Key factors when buying a laptop: (1) Purpose — for office work, look for 8GB RAM and an Intel Core i5 or AMD Ryzen 5. For gaming or video editing, go for 16GB RAM and a dedicated GPU. (2) Battery life — aim for 8+ hours for portability. (3) Display — 14–15.6 inch is a good balance of screen size and portability. (4) Storage — 256GB SSD minimum; 512GB recommended. (5) Brand — popular brands in our store include Asus, Acer, Lenovo, HP, Dell, and Apple MacBook. Budget range: office laptops from 10–20 million VND, premium from 20–40 million VND. Khi mua laptop cần xem xét: mục đích sử dụng, RAM (ít nhất 8GB), pin (8+ tiếng), màn hình (14–15.6 inch), bộ nhớ (256GB SSD trở lên) và thương hiệu.",
+    "category": "guide_electronics",
+    "keywords": ["laptop", "choose laptop", "buy laptop", "laptop guide", "mua laptop", "chọn laptop", "tư vấn laptop", "cấu hình laptop"]
+  },
+  {
+    "id": "guide_002",
+    "title": "How to Choose the Right Smartphone",
+    "content": "When choosing a smartphone: (1) Operating system — iOS (iPhone) for a smooth, long-supported experience; Android for more variety and customization. (2) Budget — entry-level (under 5 million VND), mid-range (5–15 million VND), flagship (15 million+ VND). (3) Camera — check megapixel count and night mode for photography enthusiasts. (4) Battery — 4,000–5,000 mAh for all-day use; look for fast charging (33W+). (5) Storage — 128GB is the minimum recommended. Popular brands: Samsung, iPhone, Xiaomi, Oppo, Vivo, Realme. Khi chọn điện thoại: hệ điều hành (iOS hoặc Android), ngân sách, camera, pin (4,000–5,000 mAh), bộ nhớ (ít nhất 128GB) và thương hiệu.",
+    "category": "guide_electronics",
+    "keywords": ["smartphone", "phone", "choose phone", "buy phone", "iPhone", "Android", "mua điện thoại", "chọn điện thoại", "tư vấn điện thoại"]
+  },
+  {
+    "id": "guide_003",
+    "title": "How to Choose Earbuds or Headphones",
+    "content": "Factors to consider for earbuds/headphones: (1) Form factor — true wireless earbuds (TWS) for convenience, over-ear headphones for best sound quality. (2) Noise cancellation — ANC (Active Noise Cancellation) is great for travel or office use. (3) Battery life — look for 6+ hours per charge for earbuds, 20+ hours for headphones. (4) Connectivity — Bluetooth 5.0 or higher for stable connection. (5) Budget — decent TWS earbuds start from 500,000 VND; premium ANC models from 2,000,000 VND. Popular brands: Sony, Jabra, JBL, Apple AirPods, Samsung Galaxy Buds. Chọn tai nghe cần xem: dạng tai nghe (TWS hay chụp tai), chống ồn (ANC), thời lượng pin, kết nối Bluetooth 5.0+ và thương hiệu.",
+    "category": "guide_electronics",
+    "keywords": ["earbuds", "headphones", "headset", "ANC", "noise cancellation", "choose earbuds", "tai nghe", "chọn tai nghe", "mua tai nghe", "AirPods", "TWS"]
+  },
+  {
+    "id": "guide_004",
+    "title": "How to Choose Clothing — Sizing Guide",
+    "content": "Our clothing follows standard Vietnamese sizing: S (chest 80–84cm), M (84–88cm), L (88–92cm), XL (92–96cm), XXL (96–100cm). For international brands, check the size chart on each product page. Tips: (1) If between sizes, size up for a relaxed fit or size down for a fitted look. (2) For outerwear (jackets, coats), go one size up to layer underneath. (3) Fabric matters — cotton is breathable for summer; fleece and wool for winter. Check the product description for material details. Bảng size Việt Nam: S (vòng ngực 80–84cm), M (84–88cm), L (88–92cm), XL (92–96cm), XXL (96–100cm). Nếu ở giữa hai size, chọn size lớn hơn cho dáng rộng.",
+    "category": "guide_fashion",
+    "keywords": ["size", "sizing", "clothes size", "fit", "size chart", "bảng size", "kích thước", "chọn size", "size quần áo"]
+  },
+  {
+    "id": "guide_005",
+    "title": "How to Choose Shoes — Sizing & Fit Guide",
+    "content": "Shoe sizing guide: measure your foot length in cm and refer to our chart (EU 36 = 22.5cm, EU 37 = 23cm, EU 38 = 23.5cm, EU 39 = 24.5cm, EU 40 = 25cm, EU 41 = 25.5cm, EU 42 = 26cm, EU 43 = 27cm, EU 44 = 27.5cm). Tips: (1) Measure in the afternoon when feet are slightly larger. (2) For running shoes, go half a size up for toe room. (3) For leather shoes, they may feel tight initially but will stretch. Check each product's sizing notes for brand-specific guidance. Bảng size giày: EU 36 = 22.5cm, EU 37 = 23cm, EU 38 = 23.5cm, EU 39 = 24.5cm, EU 40 = 25cm. Đo buổi chiều khi chân hơi to hơn.",
+    "category": "guide_fashion",
+    "keywords": ["shoe size", "shoe sizing", "shoe fit", "size giày", "chọn size giày", "kích thước giày", "EU size"]
+  },
+  {
+    "id": "guide_006",
+    "title": "How to Choose a Rice Cooker or Home Appliance",
+    "content": "When buying a rice cooker: (1) Capacity — 1.0L for 1–2 people, 1.8L for 3–4 people, 2.2L for 5+ people. (2) Technology — basic thermal pots are affordable; IH (Induction Heating) cookers offer better taste and texture but cost more. (3) Features — look for keep-warm function, steam tray, non-stick inner pot, and multi-grain settings. Popular brands: Cuckoo, Zojirushi, Panasonic, Tiger, Sharp. Budget: basic models from 500,000 VND; IH models from 2,000,000 VND. Khi mua nồi cơm điện: dung tích (1.0L cho 1–2 người, 1.8L cho 3–4 người), công nghệ (IH nấu ngon hơn nhưng đắt hơn), tính năng và thương hiệu.",
+    "category": "guide_appliances",
+    "keywords": ["rice cooker", "cooker", "home appliance", "nồi cơm điện", "chọn nồi cơm", "mua nồi cơm", "IH cooker", "tư vấn nồi cơm"]
+  },
+  {
+    "id": "guide_007",
+    "title": "Gift Ideas by Budget",
+    "content": "Gift ideas by budget: Under 300,000 VND — books, small accessories, phone cases, candles. 300,000–1,000,000 VND — earbuds, power banks, small speakers, fashion accessories, cookbooks. 1,000,000–3,000,000 VND — wireless headphones, smartwatches, quality clothing sets, kitchen gadgets. 3,000,000–10,000,000 VND — smartphones (mid-range), laptops (entry), branded bags, fitness equipment. Over 10,000,000 VND — flagship smartphones, premium laptops, MacBook, high-end electronics. Gợi ý quà tặng theo ngân sách: dưới 300K (sách, phụ kiện nhỏ), 300K–1M (tai nghe, sạc dự phòng), 1M–3M (tai nghe chống ồn, quần áo), 3M–10M (điện thoại tầm trung), trên 10M (điện thoại cao cấp, laptop).",
+    "category": "guide_gifts",
+    "keywords": ["gift", "gift idea", "present", "birthday gift", "quà tặng", "gợi ý quà", "quà sinh nhật", "mua quà", "tặng gì"]
+  }
+]

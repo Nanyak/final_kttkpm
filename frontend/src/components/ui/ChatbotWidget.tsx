@@ -222,6 +222,7 @@ export function ChatbotWidget() {
                       fontFamily: 'var(--font-body)',
                       fontSize: '13px',
                       lineHeight: 1.55,
+                      whiteSpace: 'pre-line',
                     }}
                   >
                     {msg.content}

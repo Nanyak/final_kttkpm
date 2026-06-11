@@ -86,7 +86,7 @@ def get_user_graph_scores(user_id: int, limit: int = 20) -> Dict[int, float]:
 
 def get_product_context_pids(product_ids: List[int], limit: int = 10) -> List[Tuple[int, float]]:
     """
-    Given a list of seed product_ids (e.g. from FAISS hits),
+    Given a list of seed product_ids (e.g. from dense or sparse retrieval hits),
     expand via SIMILAR edges to find related products.
     Returns [(product_id, score)].
     """

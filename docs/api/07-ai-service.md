@@ -36,5 +36,4 @@ Query parameters:
 | `top_n` | No | Number of results. Default: `TOP_N`. |
 | `w1`, `w2`, `w3` | No | Weight overrides for sequence, graph, and RAG signals. |
 
-Response includes `final_score`, `lstm_score`, `graph_score`, `rag_score`, and product metadata.
-
+Response includes `final_score`, `sequence_model_score`, `graph_score`, `rag_score`, and product metadata. `lstm_score` is still returned as a deprecated compatibility alias for older clients.

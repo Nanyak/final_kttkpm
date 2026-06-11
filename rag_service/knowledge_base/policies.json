@@ -1,0 +1,65 @@
+[
+  {
+    "id": "pol_001",
+    "title": "Shipping Policy — Free Shipping Threshold",
+    "content": "We offer free standard shipping on all orders over 500,000 VND. Orders below this threshold are charged a flat shipping fee of 30,000 VND. Free shipping applies automatically at checkout when the cart total meets the minimum. Chúng tôi miễn phí vận chuyển cho đơn hàng từ 500,000 VND trở lên. Đơn hàng dưới mức này chịu phí vận chuyển cố định 30,000 VND.",
+    "category": "shipping",
+    "keywords": ["free shipping", "shipping fee", "delivery cost", "phí vận chuyển", "miễn phí ship", "miễn phí giao hàng"]
+  },
+  {
+    "id": "pol_002",
+    "title": "Shipping Policy — Delivery Times",
+    "content": "Standard delivery takes 3–5 business days for most provinces. Express delivery (1–2 business days) is available for an additional fee of 50,000 VND. Same-day delivery is available in Hanoi and Ho Chi Minh City for orders placed before 12:00 noon. Giao hàng tiêu chuẩn: 3–5 ngày làm việc. Giao hàng nhanh: 1–2 ngày làm việc, phụ phí 50,000 VND. Giao hàng trong ngày tại Hà Nội và TP.HCM cho đơn đặt trước 12 giờ trưa.",
+    "category": "shipping",
+    "keywords": ["delivery time", "shipping time", "express delivery", "same day", "thời gian giao hàng", "giao hàng nhanh", "giao hàng trong ngày"]
+  },
+  {
+    "id": "pol_003",
+    "title": "Return & Refund Policy",
+    "content": "You may return most items within 30 days of delivery for a full refund or exchange, provided the item is unused, in its original packaging, and with all tags intact. Electronics and appliances have a 7-day return window. To initiate a return, contact our support team with your order number. Refunds are processed within 5–7 business days after we receive the returned item. Bạn có thể đổi trả hàng trong vòng 30 ngày kể từ ngày nhận hàng, miễn là sản phẩm còn nguyên vẹn, chưa qua sử dụng. Điện tử và thiết bị có cửa sổ đổi trả 7 ngày. Hoàn tiền trong 5–7 ngày làm việc sau khi nhận lại hàng.",
+    "category": "returns",
+    "keywords": ["return", "refund", "exchange", "return policy", "đổi trả", "hoàn tiền", "đổi hàng", "trả hàng"]
+  },
+  {
+    "id": "pol_004",
+    "title": "Return Policy — Non-Returnable Items",
+    "content": "The following items cannot be returned: perishable goods, digital downloads, personalized/custom-made items, intimate apparel (underwear, swimwear) for hygiene reasons, and items marked as 'Final Sale'. If a non-returnable item arrives damaged or defective, please contact support within 48 hours. Các mặt hàng không được đổi trả: thực phẩm, tải xuống kỹ thuật số, hàng đặt may riêng, đồ lót vì lý do vệ sinh, và hàng ghi rõ 'Không đổi trả'.",
+    "category": "returns",
+    "keywords": ["non-returnable", "no return", "final sale", "không đổi trả", "không được hoàn hàng"]
+  },
+  {
+    "id": "pol_005",
+    "title": "Payment Methods Accepted",
+    "content": "We accept the following payment methods: (1) Credit & debit cards: Visa, Mastercard, JCB, American Express. (2) Bank transfer / Internet banking: all major Vietnamese banks. (3) E-wallets: MoMo, ZaloPay, VNPay, ShopeePay. (4) Cash on delivery (COD) available for orders under 5,000,000 VND. (5) Installment plans (trả góp) via Visa/Mastercard for purchases over 3,000,000 VND. Chúng tôi chấp nhận: thẻ tín dụng/ghi nợ (Visa, Mastercard, JCB), chuyển khoản ngân hàng, ví điện tử (MoMo, ZaloPay, VNPay), thanh toán khi nhận hàng (COD), và trả góp qua thẻ cho đơn từ 3 triệu VND.",
+    "category": "payment",
+    "keywords": ["payment", "payment method", "credit card", "COD", "MoMo", "ZaloPay", "VNPay", "installment", "thanh toán", "phương thức thanh toán", "trả góp", "ví điện tử", "thẻ tín dụng", "tiền mặt"]
+  },
+  {
+    "id": "pol_006",
+    "title": "Warranty Policy",
+    "content": "All electronics carry a minimum 12-month manufacturer warranty unless otherwise stated on the product page. Warranty covers manufacturing defects and hardware failures under normal use. Physical damage, water damage, and unauthorized modifications void the warranty. To claim warranty, bring the product to any of our service centers or contact support with your order number and proof of purchase. Tất cả sản phẩm điện tử có bảo hành tối thiểu 12 tháng. Bảo hành không áp dụng cho hư hỏng do va đập, nước, hoặc tự ý sửa chữa.",
+    "category": "warranty",
+    "keywords": ["warranty", "guarantee", "bảo hành", "bảo lãnh", "hỏng hóc", "lỗi sản xuất", "repair", "service center"]
+  },
+  {
+    "id": "pol_007",
+    "title": "Order Cancellation Policy",
+    "content": "You can cancel an order for free within 1 hour of placing it, before it is picked up for shipping. After 1 hour, cancellation may not be possible if the order is already being processed. If an order cannot be cancelled, you can still return it after delivery according to our return policy. To cancel, go to 'My Orders' and click 'Cancel Order', or contact our support. Bạn có thể hủy đơn hàng miễn phí trong vòng 1 giờ sau khi đặt, trước khi đơn được lấy đi giao. Sau 1 giờ, đơn có thể đã được xử lý và không thể hủy. Vào 'Đơn của tôi' và nhấn 'Hủy đơn', hoặc liên hệ bộ phận hỗ trợ.",
+    "category": "orders",
+    "keywords": ["cancel order", "cancellation", "hủy đơn", "hủy đơn hàng", "bỏ đơn"]
+  },
+  {
+    "id": "pol_008",
+    "title": "Price Match & Promotions",
+    "content": "We do not offer a price-match guarantee against competitor stores. However, we run regular promotions including: daily flash sales (khuyến mãi chớp nhoáng), seasonal sales (Tết, Black Friday, 9.9, 11.11, 12.12), loyalty points (điểm tích lũy) earned on every purchase, and member-exclusive vouchers. Subscribe to our newsletter or follow us on social media to stay updated. Chúng tôi không bảo lãnh giá bằng đối thủ, nhưng thường xuyên có khuyến mãi: flash sale hàng ngày, sale theo mùa, tích điểm đổi thưởng và voucher cho thành viên.",
+    "category": "promotions",
+    "keywords": ["discount", "sale", "promotion", "voucher", "coupon", "flash sale", "loyalty points", "giảm giá", "khuyến mãi", "voucher", "tích điểm", "ưu đãi"]
+  },
+  {
+    "id": "pol_009",
+    "title": "Privacy & Data Policy",
+    "content": "We collect only the personal data necessary to process your orders and improve your shopping experience. We do not sell your data to third parties. Your purchase history is used to personalize product recommendations. You can request deletion of your data at any time by contacting our support team. Chúng tôi chỉ thu thập dữ liệu cần thiết để xử lý đơn hàng và cải thiện trải nghiệm mua sắm. Không bán dữ liệu cho bên thứ ba. Lịch sử mua hàng được dùng để cá nhân hóa gợi ý sản phẩm.",
+    "category": "privacy",
+    "keywords": ["privacy", "data", "personal information", "bảo mật", "dữ liệu cá nhân", "thông tin cá nhân", "quyền riêng tư"]
+  }
+]

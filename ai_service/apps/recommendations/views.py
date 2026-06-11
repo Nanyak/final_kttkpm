@@ -10,8 +10,8 @@ class RecommendView(APIView):
     GET /api/ai/recommend/?user_id=<int>[&query=<str>&top_n=<int>&w1=&w2=&w3=]
 
     Returns personalised product recommendations using:
-      LSTM (sequential) + Knowledge Graph + RAG (semantic)
-    combined as: final_score = w1*lstm + w2*graph + w3*rag
+      active sequence model + Knowledge Graph + RAG (semantic)
+    combined as: final_score = w1*sequence_model + w2*graph + w3*rag
     """
 
     def get(self, request):

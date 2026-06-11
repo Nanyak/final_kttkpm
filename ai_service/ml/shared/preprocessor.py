@@ -1,6 +1,6 @@
 """
 Converts raw UserBehavior rows into (input_sequence, target) pairs
-suitable for training the NextItemLSTM.
+suitable for training next-item sequence models.
 """
 from collections import defaultdict
 from typing import Dict, List, Tuple

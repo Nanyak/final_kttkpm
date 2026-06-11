@@ -15,7 +15,7 @@ This folder documents the current project: a containerized e-commerce platform w
 | Payment Service | Django REST | 8005 | Simulated payment gateway, receipts, refunds, VNPay webhook | PostgreSQL `payments_db` |
 | Shipping Service | Django REST + worker | 8006 | Shipment creation, tracking, status history, fee calculation | PostgreSQL `shipping_db` |
 | AI Service | Django REST | 8007 | Behavior tracking and hybrid product recommendations | MySQL `ai_service_db`, Neo4j |
-| RAG Service | Django REST | 8008 | Chatbot and RAG scores using FAISS + Neo4j + optional OpenAI | FAISS volume, Neo4j |
+| RAG Service | Django REST | 8008 | Chatbot and RAG scores using dense FAISS + sparse TF-IDF + Neo4j + optional OpenAI | Retrieval index volume, Neo4j |
 
 ## Documentation Map
 
@@ -35,4 +35,3 @@ All diagrams in [images](images/) are stored as Mermaid source files (`.mmd`) wi
 ```bash
 mmdc -i docs/images/01-system-architecture.mmd -o docs/images/01-system-architecture.png
 ```
-
