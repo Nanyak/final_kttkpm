@@ -11,6 +11,10 @@ POST /api/ai/chatbot/
     ]
 }
 
+POST /api/ai/chatbot/stream/
+  Same request body.  Response: text/event-stream (Server-Sent Events).
+  Event types: "metadata" (recommended products), "token" (answer chunks), "done".
+
 Flow
 ----
 1. HybridRetriever.get_context_and_scores()
@@ -26,15 +30,33 @@ Flow
 
 3. Enrich product scores with metadata and return ranked list
 """
+import json
 import re
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 from django.conf import settings
+from django.http import StreamingHttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from django.utils.decorators import method_decorator
 
 from rag.hybrid    import get_hybrid_retriever
-from rag.generator import generate_answer, generate_fallback
+from rag.generator import (
+    generate_answer, generate_answer_stream, generate_fallback,
+    generate_follow_ups, expand_query, looks_vietnamese,
+)
+
+
+def _parse_source(context: str) -> str:
+    has_kb      = '[Store Knowledge Base]' in context
+    has_product = '[ID:' in context
+    if has_kb and has_product:
+        return 'mixed'
+    if has_kb:
+        return 'knowledge_base'
+    return 'products'
 
 
 class ChatbotView(APIView):
@@ -66,7 +88,9 @@ class ChatbotView(APIView):
             )
 
         retriever = get_hybrid_retriever()
-        retrieval_query = _build_session_retrieval_query(query, history)
+        retrieval_query = _build_session_retrieval_query(
+            expand_query(query), history
+        )
         context, product_scores = retriever.get_context_and_scores(
             query=retrieval_query, user_id=uid, top_k=settings.TOP_K,
         )
@@ -85,7 +109,7 @@ class ChatbotView(APIView):
         else:
             answer = generate_fallback(query, context, history=history)
 
-        # ── 3. Build recommended cards from the same context lines shown in the answer ──
+        # ── 3. Build recommended cards ───────────────────────────
         q_lower = query.lower()
         wants_cheaper = any(kw in q_lower for kw in (
             'cheaper', 'less expensive', 'lower price', 'more affordable', 'budget',
@@ -94,9 +118,16 @@ class ChatbotView(APIView):
         display_pids = _pids_from_context(context, wants_cheaper=wants_cheaper, top_n=3)
         recommended  = _enrich_ordered(display_pids, product_scores)
 
+        # ── 4. Metadata enrichment ───────────────────────────────
+        is_vi      = looks_vietnamese(query)
+        source     = _parse_source(context)
+        follow_ups = generate_follow_ups(query, context, is_vi=is_vi)
+
         return Response({
             'query':        query,
             'answer':       answer,
+            'source':       source,
+            'follow_ups':   follow_ups,
             'context_used': context,
             'recommended':  recommended,
         })
@@ -193,3 +224,96 @@ def _build_session_retrieval_query(query: str, history: list, max_turns: int = 3
     if not recent:
         return query
     return ' '.join(recent + [query])
+
+
+# ── Streaming endpoint ────────────────────────────────────────────────────────
+
+@csrf_exempt
+def chatbot_stream(request):
+    """
+    POST /api/ai/chatbot/stream/
+
+    Server-Sent Events chatbot endpoint.  Identical logic to ChatbotView but
+    streams the LLM answer token-by-token instead of waiting for the full reply.
+
+    SSE event types
+    ---------------
+    {"type": "metadata", "source": "...", "follow_ups": [...], "recommended": [...]}
+    {"type": "token",    "content": "..."}   (one or more)
+    {"type": "done"}
+    """
+    if request.method != 'POST':
+        from django.http import HttpResponseNotAllowed
+        return HttpResponseNotAllowed(['POST'])
+
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        data = {}
+
+    query   = str(data.get('query', '')).strip()
+    user_id = data.get('user_id')
+    history = data.get('history') or []
+
+    if not query:
+        from django.http import JsonResponse
+        return JsonResponse({'error': 'query is required'}, status=400)
+
+    try:
+        uid = int(user_id) if user_id not in (None, '') else None
+    except (TypeError, ValueError):
+        from django.http import JsonResponse
+        return JsonResponse({'error': 'user_id must be an integer'}, status=400)
+
+    # Retrieval (fast — runs before streaming begins)
+    retriever = get_hybrid_retriever()
+    retrieval_query = _build_session_retrieval_query(expand_query(query), history)
+    context, product_scores = retriever.get_context_and_scores(
+        query=retrieval_query, user_id=uid, top_k=settings.TOP_K,
+    )
+
+    q_lower = query.lower()
+    wants_cheaper = any(kw in q_lower for kw in (
+        'cheaper', 'less expensive', 'lower price', 'more affordable', 'budget',
+        'rẻ hơn', 're hon', 'giá thấp hơn', 'ít tiền hơn',
+    ))
+    display_pids = _pids_from_context(context, wants_cheaper=wants_cheaper, top_n=3)
+    recommended  = _enrich_ordered(display_pids, product_scores)
+    is_vi        = looks_vietnamese(query)
+    source       = _parse_source(context)
+    follow_ups   = generate_follow_ups(query, context, is_vi=is_vi)
+
+    api_key = settings.OPENAI_API_KEY
+
+    def _event(payload: dict) -> str:
+        return f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+
+    def _stream():
+        yield _event({
+            'type':        'metadata',
+            'source':      source,
+            'follow_ups':  follow_ups,
+            'recommended': recommended,
+        })
+
+        if api_key:
+            try:
+                for token in generate_answer_stream(
+                    query=query, context=context,
+                    api_key=api_key, model=settings.OPENAI_MODEL,
+                    history=history,
+                ):
+                    yield _event({'type': 'token', 'content': token})
+            except Exception:
+                fallback = generate_fallback(query, context, history=history)
+                yield _event({'type': 'token', 'content': fallback})
+        else:
+            fallback = generate_fallback(query, context, history=history)
+            yield _event({'type': 'token', 'content': fallback})
+
+        yield _event({'type': 'done'})
+
+    response = StreamingHttpResponse(_stream(), content_type='text/event-stream')
+    response['Cache-Control']    = 'no-cache'
+    response['X-Accel-Buffering'] = 'no'
+    return response
