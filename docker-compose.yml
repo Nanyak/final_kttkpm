@@ -397,5 +397,4 @@ volumes:
   redis_data:
   rabbitmq_data:
   neo4j_data:
-  ai_models:
   rag_faiss:
