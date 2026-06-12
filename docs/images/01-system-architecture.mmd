@@ -1,39 +1,58 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#74c7e8", "primaryBorderColor": "#1f2937", "primaryTextColor": "#111827", "lineColor": "#2f2f2f", "fontFamily": "Arial"}}}%%
 flowchart TB
-  Browser[Browser / Customer] --> Gateway[Nginx API Gateway :8000]
-  Gateway --> Frontend[React Frontend]
-  Gateway --> Product[Product Service :8001]
-  Gateway --> User[User Service :8002]
-  Gateway --> Cart[Cart Service :8003]
-  Gateway --> Order[Order Service :8004]
-  Gateway --> Payment[Payment Service :8005]
-  Gateway --> Shipping[Shipping Service :8006]
-  Gateway --> AI[AI Service :8007]
-  Gateway --> RAG[RAG Service :8008]
+  Client["Customer Browser"]
+  Gateway["Nginx API Gateway\n:8000"]
+  Frontend["React Frontend\nfrontend:80"]
 
-  Product --> MySQL[(MySQL products_db)]
-  User --> MySQLUsers[(MySQL users_db)]
-  Cart --> MySQLCarts[(MySQL carts_db)]
-  Cart --> Redis[(Redis)]
-  Order --> PostgresOrders[(PostgreSQL orders_db)]
-  Payment --> PostgresPayments[(PostgreSQL payments_db)]
-  Shipping --> PostgresShipping[(PostgreSQL shipping_db)]
-  AI --> MySQLAI[(MySQL ai_service_db)]
-  AI --> Neo4j[(Neo4j)]
-  RAG --> Neo4j
-  RAG --> FAISS[(FAISS index volume)]
+  subgraph API["Application Services"]
+    direction LR
+    Commerce["Commerce Services\nProduct :8001\nUser :8002\nCart :8003\nOrder :8004\nPayment :8005\nShipping :8006"]
+    Intelligence["AI and RAG Services\nAI :8007\nRAG :8008"]
+    InternalHTTP["Internal HTTP Calls\nCart -> Product\nOrder -> Cart/Product\nShipping -> Order"]
+  end
 
-  Cart -- product lookup --> Product
-  Order -- fetch active cart --> Cart
-  Order -- reduce stock --> Product
-  Shipping -- fetch order --> Order
-  AI -- RAG scores --> RAG
-  RAG -- enrich products --> Product
+  subgraph Async["Asynchronous Processing"]
+    direction LR
+    RabbitMQ["RabbitMQ"]
+    OrderWorker["Order Consumer"]
+    ShippingWorker["Shipping Consumer"]
+  end
 
-  Order -- order events --> RabbitMQ[(RabbitMQ)]
-  Payment -- payment events --> RabbitMQ
-  Shipping -- shipment events --> RabbitMQ
-  RabbitMQ --> OrderWorker[Order Consumer]
-  RabbitMQ --> ShippingWorker[Shipping Consumer]
-  OrderWorker --> Order
-  ShippingWorker --> Shipping
+  subgraph Storage["Storage"]
+    direction LR
+    MySQL["MySQL\nproducts_db\nusers_db\ncarts_db\nai_service_db"]
+    Postgres["PostgreSQL\norders_db\npayments_db\nshipping_db"]
+    Redis["Redis\ncart support"]
+    Neo4j["Neo4j\ngraph recommendations"]
+    FAISS["FAISS\nRAG index volume"]
+  end
 
+  Client --> Gateway
+  Gateway --> Frontend
+  Gateway --> Commerce
+  Gateway --> Intelligence
+
+  Commerce -.-> InternalHTTP
+  Intelligence -.-> Commerce
+
+  Commerce --> MySQL
+  Commerce --> Postgres
+  Commerce --> Redis
+  Intelligence --> MySQL
+  Intelligence --> Neo4j
+  Intelligence --> FAISS
+
+  Commerce --> RabbitMQ
+  RabbitMQ --> OrderWorker
+  RabbitMQ --> ShippingWorker
+  OrderWorker --> Commerce
+  ShippingWorker --> Commerce
+
+  classDef component fill:#74c7e8,stroke:#1f2937,color:#111827;
+  classDef store fill:#ffffff,stroke:#1f2937,color:#111827;
+
+  class Client,Gateway,Frontend,Commerce,Intelligence,InternalHTTP,RabbitMQ,OrderWorker,ShippingWorker component;
+  class MySQL,Postgres,Redis,Neo4j,FAISS store;
+  style API fill:#ffffff,stroke:#b8b8b8,color:#111827
+  style Async fill:#ffffff,stroke:#b8b8b8,color:#111827
+  style Storage fill:#ffffff,stroke:#b8b8b8,color:#111827
